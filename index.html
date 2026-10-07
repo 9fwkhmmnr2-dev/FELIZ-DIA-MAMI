@@ -2,1587 +2,423 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mamá — Una aventura</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6efe4">
+<title>Para mamá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #111;
-  color: white;
-  min-height: 100%;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-.screen {
-  display: none;
-  min-height: 100vh;
-  padding: 35px 20px;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  animation: fade .4s ease;
-}
-
-.screen.active {
-  display: flex;
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.content {
-  width: min(850px, 100%);
-  margin: auto;
-}
-
-h1 {
-  font-size: clamp(42px, 10vw, 90px);
-  margin: 10px 0;
-  letter-spacing: 5px;
-}
-
-h2 {
-  font-size: clamp(28px, 6vw, 50px);
-  margin-bottom: 15px;
-}
-
-p {
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-button {
-  border: 0;
-  border-radius: 12px;
-  padding: 15px 24px;
-  margin: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  background: white;
-  color: #111;
-  transition: .2s;
-}
-
-button:hover {
-  transform: scale(1.04);
-}
-
-button:active {
-  transform: scale(.97);
-}
-
-.primary {
-  background: #fff;
-  color: #111;
-}
-
-.secondary {
-  background: #333;
-  color: white;
-}
-
-.locked {
-  opacity: .35;
-  cursor: not-allowed;
-}
-
-.photo {
-  width: min(650px, 95%);
-  max-height: 520px;
-  object-fit: cover;
-  border-radius: 18px;
-  margin: 20px auto;
-  display: block;
-  box-shadow: 0 15px 40px rgba(0,0,0,.35);
-}
-
-#inicio {
-  background:
-    linear-gradient(rgba(0,0,0,.38), rgba(0,0,0,.65)),
-    url("assets/foto-inicio.jpg") center/cover no-repeat;
-}
-
-#inicio .content {
-  padding: 40px 20px;
-}
-
-#inicio h1 {
-  text-shadow: 0 5px 20px rgba(0,0,0,.8);
-}
-
-.subtitle {
-  font-size: 20px;
-  margin-bottom: 35px;
-}
-
-/* HISTORIA */
-
-.history-card {
-  background: #1c1c1c;
-  padding: 25px;
-  border-radius: 20px;
-  margin-top: 20px;
-}
-
-.history-text {
-  max-width: 650px;
-  margin: auto;
-}
-
-/* RECUERDOS */
-
-.memory-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin: 30px 0;
-}
-
-.memory {
-  background: #202020;
-  border-radius: 18px;
-  padding: 25px 15px;
-  cursor: pointer;
-  transition: .2s;
-  border: 1px solid #333;
-}
-
-.memory:hover {
-  transform: translateY(-5px);
-  background: #292929;
-}
-
-.memory .icon {
-  font-size: 45px;
-  margin-bottom: 10px;
-}
-
-.memory p {
-  font-size: 14px;
-}
-
-.memory.opened {
-  border-color: white;
-}
-
-/* MISIONES */
-
-.mission-list {
-  display: grid;
-  gap: 12px;
-  margin: 25px auto;
-  max-width: 600px;
-}
-
-.mission {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 17px 20px;
-  background: #202020;
-  border-radius: 14px;
-  border: 1px solid #333;
-}
-
-.mission.done {
-  border-color: #777;
-  background: #292929;
-}
-
-.check {
-  font-size: 24px;
-}
-
-/* DESAYUNO */
-
-.game-area {
-  position: relative;
-  width: min(650px, 95%);
-  height: 500px;
-  margin: 25px auto;
-  background: #191919;
-  border: 2px solid #333;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.food {
-  position: absolute;
-  font-size: 42px;
-  cursor: pointer;
-  user-select: none;
-  animation: fall linear forwards;
-}
-
-@keyframes fall {
-  from {
-    transform: translateY(-70px);
-  }
-  to {
-    transform: translateY(570px);
-  }
-}
-
-.score {
-  font-size: 22px;
-  margin: 15px;
-}
-
-/* COLEGIO */
-
-.school-game {
-  width: min(700px, 95%);
-  height: 400px;
-  margin: 25px auto;
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(#222 0 75%, #333 75%);
-  border: 2px solid #444;
-}
-
-.player {
-  position: absolute;
-  left: 40px;
-  bottom: 70px;
-  font-size: 45px;
-  transition: left .08s;
-}
-
-.school {
-  position: absolute;
-  right: 25px;
-  bottom: 55px;
-  font-size: 65px;
-}
-
-.obstacle {
-  position: absolute;
-  bottom: 65px;
-  font-size: 42px;
-}
-
-.controls {
-  margin-top: 15px;
-}
-
-.control-btn {
-  width: 65px;
-  height: 55px;
-  padding: 0;
-  font-size: 25px;
-}
-
-/* DESPERTAR */
-
-.wakeup-character {
-  font-size: 130px;
-  margin: 35px;
-  transition: .3s;
-}
-
-.wakeup-progress {
-  width: min(500px, 90%);
-  height: 20px;
-  background: #333;
-  border-radius: 20px;
-  margin: 20px auto;
-  overflow: hidden;
-}
-
-.wakeup-bar {
-  height: 100%;
-  width: 0%;
-  background: white;
-  transition: .2s;
-}
-
-/* ROPA */
-
-.washer {
-  width: min(500px, 90%);
-  margin: 25px auto;
-  padding: 30px;
-  background: #202020;
-  border-radius: 25px;
-}
-
-.washer-door {
-  width: 190px;
-  height: 190px;
-  border-radius: 50%;
-  border: 12px solid #555;
-  background: #111;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 55px;
-}
-
-.clothes {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 20px;
-}
-
-.clothes button {
-  min-width: 110px;
-}
-
-.clothes button.used {
-  opacity: .25;
-}
-
-/* CUARTO */
-
-.room {
-  width: min(700px, 95%);
-  height: 430px;
-  background: #242424;
-  border-radius: 20px;
-  margin: 25px auto;
-  position: relative;
-  overflow: hidden;
-}
-
-.room-item {
-  position: absolute;
-  font-size: 45px;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.room-item:hover {
-  transform: scale(1.15);
-}
-
-.room-item.sorted {
-  opacity: 0;
-  transform: scale(.3);
-  pointer-events: none;
-}
-
-/* SECRETO */
-
-.secret-box {
-  background: #202020;
-  border: 1px solid #444;
-  padding: 35px 25px;
-  border-radius: 25px;
-  max-width: 650px;
-  margin: auto;
-}
-
-.gift {
-  font-size: 110px;
-  margin: 25px;
-}
-
-/* PISTAS */
-
-.clue {
-  background: #f1eee7;
-  color: #191919;
-  max-width: 650px;
-  margin: 25px auto;
-  padding: 35px 25px;
-  border-radius: 8px;
-  box-shadow: 0 15px 40px rgba(0,0,0,.3);
-  font-family: Georgia, serif;
-}
-
-.clue p {
-  font-size: 20px;
-}
-
-/* CARTA */
-
-.letter {
-  max-width: 700px;
-  margin: auto;
-  background: #f4f0e7;
-  color: #222;
-  padding: 50px 30px;
-  border-radius: 8px;
-  font-family: Georgia, serif;
-  box-shadow: 0 20px 50px rgba(0,0,0,.4);
-}
-
-.letter h2 {
-  font-family: Georgia, serif;
-}
-
-.letter p {
-  font-size: 21px;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 650px) {
-  .memory-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .game-area {
-    height: 430px;
-  }
-
-  .school-game {
-    height: 350px;
-  }
-
-  button {
-    padding: 14px 18px;
-  }
-}
+:root{--crema:#f6efe4;--beige:#e9dcc8;--blanco:#fffaf3;--tinta:#241f1d;--rosa:#c98a94;--rosa2:#e8c4c9;--oro:#c9a45c;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Nunito',system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow-x:hidden;background:var(--crema);color:var(--tinta);font-family:var(--sans)}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:max(24px,env(safe-area-inset-top)) 22px max(24px,env(safe-area-inset-bottom));overflow-y:auto;overflow-x:hidden;text-align:center;background:radial-gradient(circle at 20% 0%,var(--blanco),var(--crema) 55%,var(--beige))}
+.screen.active{display:flex;animation:fade .7s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.1}
+h2{font-size:clamp(30px,8vw,42px)}
+p{font-size:18px;line-height:1.55;max-width:34ch}
+.btn{font-family:var(--sans);font-weight:800;font-size:17px;letter-spacing:.08em;min-height:56px;padding:0 34px;border:none;border-radius:999px;background:var(--rosa);color:#fff;box-shadow:0 10px 24px rgba(201,138,148,.45);cursor:pointer;transition:transform .2s,box-shadow .2s;max-width:100%}
+.btn:active{transform:scale(.95);box-shadow:0 4px 10px rgba(201,138,148,.4)}
+.btn.oro{background:linear-gradient(135deg,#d9b974,var(--oro));color:#2b2118;box-shadow:0 10px 24px rgba(201,164,92,.45)}
+.hidden{display:none!important}
+/* inicio */
+#inicio{color:#fff;background:#3a2a2a url('assets/foto-inicio.jpg') center/cover no-repeat}
+#inicio::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,18,18,.55),rgba(30,18,18,.7))}
+#inicio>*{position:relative}
+#inicio h1{font-size:clamp(64px,22vw,110px);letter-spacing:.12em;text-shadow:0 4px 24px rgba(0,0,0,.4)}
+#inicio p{color:#f6e6e2;font-family:var(--serif);font-style:italic;font-size:24px}
+#inicio .btn{margin-top:14px;animation:pulso 2.4s ease-in-out infinite}
+@keyframes pulso{50%{transform:scale(1.05)}}
+/* historia */
+.foto{width:min(82vw,360px);aspect-ratio:4/5;object-fit:cover;border-radius:26px;border:10px solid var(--blanco);box-shadow:0 18px 40px rgba(60,40,30,.28);background:var(--beige);animation:aparece .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes aparece{from{opacity:0;transform:scale(.92) rotate(-3deg)}to{opacity:1;transform:rotate(var(--r,-1.5deg))}}
+.dots{display:flex;gap:8px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--beige);transition:.3s}.dots i.on{background:var(--rosa);width:26px;border-radius:9px}
+/* recuerdos */
+.cards{display:flex;flex-direction:column;gap:14px;width:min(100%,380px)}
+.card{display:flex;align-items:center;gap:16px;text-align:left;padding:18px 20px;border-radius:22px;border:1.5px solid var(--beige);background:var(--blanco);box-shadow:0 8px 22px rgba(60,40,30,.1);font-family:var(--serif);font-size:26px;font-weight:700;color:var(--tinta);min-height:78px;cursor:pointer;transition:.3s}
+.card span{font-size:34px}
+.card.vista{background:var(--rosa2);border-color:var(--rosa);transform:scale(.97)}
+.card small{display:block;font-family:var(--sans);font-size:14px;font-weight:600;opacity:.65}
+/* misiones */
+.lista{display:flex;flex-direction:column;gap:12px;width:min(100%,400px)}
+.mis{display:flex;align-items:center;gap:14px;text-align:left;padding:14px 18px;min-height:68px;border-radius:20px;border:2px solid var(--oro);background:var(--blanco);font-family:var(--sans);font-weight:800;font-size:17px;color:var(--tinta);box-shadow:0 6px 0 rgba(201,164,92,.55),0 12px 22px rgba(60,40,30,.1);cursor:pointer;transition:.25s}
+.mis b{font-family:var(--serif);width:34px;height:34px;flex:none;border-radius:50%;background:var(--oro);color:#fff;display:grid;place-items:center;font-size:20px}
+.mis em{margin-left:auto;font-style:normal;font-size:22px}
+.mis:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(201,164,92,.55)}
+.mis.lock{opacity:.4;filter:grayscale(.7);pointer-events:none;box-shadow:none;border-style:dashed}
+.mis.ok{background:var(--rosa2);border-color:var(--rosa);box-shadow:0 6px 0 rgba(201,138,148,.6);pointer-events:none}
+.mis.ok b{background:var(--rosa)}
+.hud{font-family:var(--serif);font-size:22px;color:var(--rosa)}
+/* juegos */
+.stage{position:relative;width:min(100%,380px);height:300px;border-radius:26px;background:linear-gradient(#fbeed9,#f2dcc0);border:3px solid var(--blanco);box-shadow:inset 0 0 0 2px var(--oro),0 14px 30px rgba(60,40,30,.18);overflow:hidden;touch-action:manipulation}
+.item{position:absolute;font-size:46px;background:none;border:none;cursor:pointer;animation:flota 2.2s ease-in-out infinite;filter:drop-shadow(0 6px 5px rgba(0,0,0,.2));padding:8px}
+@keyframes flota{50%{transform:translateY(-10px) rotate(6deg)}}
+.item.pop{animation:pop .4s forwards;pointer-events:none}
+@keyframes pop{to{transform:scale(2) translateY(-30px);opacity:0}}
+.bar{width:min(100%,380px);height:20px;border-radius:99px;background:var(--beige);overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.15)}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--rosa2),var(--rosa),var(--oro));transition:width .35s}
+.suelo{position:absolute;left:0;right:0;bottom:0;height:60px;background:#cfe0c4}
+.nene{position:absolute;bottom:50px;left:4%;font-size:54px;transition:left .45s cubic-bezier(.3,1.4,.5,1)}
+.cole{position:absolute;bottom:50px;right:3%;font-size:70px}
+.item.cae{animation:cae var(--d,3.5s) linear forwards}
+@keyframes cae{from{top:-70px}to{top:330px}}
+.despRow{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:6px}
+.cara{font-size:92px;background:none;border:none;cursor:pointer;padding:6px;line-height:1;transition:transform .2s}
+.cara.boing{animation:boing .3s}
+@keyframes boing{40%{transform:scale(1.25) rotate(-6deg)}}
+.frase{font-family:var(--serif);font-style:italic;font-size:24px;line-height:1.35;color:var(--tinta);max-width:30ch;min-height:3.8em;animation:fade .8s both}
+.frase.cambia{animation:none}
+.reloj{font-size:92px;text-align:center;display:block;line-height:1}
+.reloj.shake{animation:shake .25s}
+@keyframes shake{25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+.lava{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:170px;height:190px;border-radius:22px;background:linear-gradient(#fff,#ece5da);border:3px solid #d8cdbb;box-shadow:0 10px 20px rgba(0,0,0,.18)}
+.lava::before{content:"";position:absolute;top:10px;left:14px;right:14px;height:14px;border-radius:8px;background:var(--rosa2)}
+.lava .puerta{position:absolute;left:50%;top:38px;transform:translateX(-50%);width:118px;height:118px;border-radius:50%;border:8px solid #c4b8a6;background:radial-gradient(circle,#cfe6f0,#8fb9cc);display:grid;place-items:center;font-size:34px;overflow:hidden}
+.lava.gira .puerta span{animation:gira .6s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.ropa{position:absolute;top:14px;left:0;right:0;display:flex;justify-content:center;gap:4px}
+.hab{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:14px;position:absolute;inset:0}
+.zona{position:absolute;left:12px;right:12px;bottom:12px;height:84px;border-radius:18px;border:2px dashed var(--oro);background:rgba(255,250,243,.7);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
+.zona .item{position:static;animation:asienta .5s both;font-size:38px;padding:2px}
+@keyframes asienta{from{transform:translateY(-40px) scale(1.5);opacity:0}}
+.toast{position:fixed;left:50%;top:22px;transform:translate(-50%,-90px);background:var(--tinta);color:#fff;padding:14px 24px;border-radius:99px;font-weight:800;z-index:9;transition:transform .5s cubic-bezier(.2,1.2,.4,1);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.toast.on{transform:translate(-50%,0)}
+/* secreto */
+#secreto{background:radial-gradient(circle at 50% 40%,#3b2531,#17101a 70%);color:#f6e6d4}
+#secreto h2{color:var(--oro);letter-spacing:.14em}
+#secreto p{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--rosa2)}
+.regalo{font-size:130px;animation:regalo 3s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(201,164,92,.6))}
+@keyframes regalo{50%{transform:translateY(-18px) rotate(4deg) scale(1.05)}}
+.chispas::before,.chispas::after{content:"✦";position:absolute;color:var(--oro);font-size:28px;animation:brilla 2.5s infinite}
+.chispas::before{top:18%;left:14%}.chispas::after{bottom:22%;right:14%;animation-delay:1.2s;color:var(--rosa)}
+@keyframes brilla{50%{opacity:.15;transform:scale(.6)}}
+/* pistas */
+.papel{width:min(100%,400px);padding:34px 26px;border-radius:6px 22px 6px 22px;background:#fbf3e2 repeating-linear-gradient(transparent 0 33px,rgba(201,164,92,.15) 33px 34px);box-shadow:0 18px 40px rgba(60,40,30,.25),inset 0 0 40px rgba(201,164,92,.15);transform:rotate(-1deg);border:1px solid #e3d3b2;position:relative}
+.papel::before{content:"";position:absolute;top:-12px;left:50%;width:80px;height:24px;transform:translateX(-50%) rotate(2deg);background:rgba(201,138,148,.55)}
+.papel h3{font-size:34px;color:var(--rosa);margin-bottom:12px}
+.papel p{font-family:var(--serif);font-size:23px;font-weight:500;line-height:1.5;max-width:none;text-align:left}
+/* carta */
+.carta{width:min(100%,400px);padding:38px 28px;border-radius:14px;background:linear-gradient(#fffaf0,#f8ecd6);box-shadow:0 22px 50px rgba(60,40,30,.28);border:1px solid #e8d9b9;animation:carta 1.6s ease both}
+@keyframes carta{from{opacity:0;transform:translateY(40px) scale(.96)}}
+.carta h2{color:var(--rosa);margin-bottom:16px}
+.carta p{font-family:var(--serif);font-size:24px;font-weight:500;max-width:none;margin-bottom:14px;text-align:left}
+.final .corazon{font-size:90px;animation:lat 1.4s infinite}
+@keyframes lat{20%{transform:scale(1.18)}40%{transform:scale(1)}60%{transform:scale(1.12)}}
+.final h2{font-size:clamp(40px,11vw,56px)}
+.final h3{font-family:var(--serif);font-style:italic;color:var(--rosa);font-size:30px}
+
+.frase{font-family:var(--serif);font-style:italic;font-weight:500;font-size:24px;line-height:1.35;color:var(--tinta);max-width:30ch;min-height:66px;animation:fade .8s both}
+.item.cae{top:-70px;animation:caer var(--d,3.5s) linear infinite}
+@keyframes caer{to{transform:translateY(400px) rotate(40deg)}}
+.item.cae.hit{animation-play-state:paused;pointer-events:none}
+.item.cae.hit span{display:inline-block;animation:pop .4s forwards}
+.par{display:flex;align-items:center;justify-content:center;gap:6px;height:100%}
+.par .reloj{margin:0;font-size:92px;cursor:pointer}
+.cara{font-size:92px;cursor:pointer;display:inline-block;user-select:none}
+.cara.rebota{animation:rebota .35s}
+@keyframes rebota{40%{transform:scale(1.3) rotate(-8deg)}}
+.ruta{position:absolute;left:0;right:0;bottom:0;height:60px;background:#6b6663;border-top:4px solid #8b8480}
+.ruta::after{content:"";position:absolute;left:0;right:0;top:26px;height:4px;background:repeating-linear-gradient(90deg,#f6efe4 0 26px,transparent 26px 56px);animation:camino .5s linear infinite}
+@keyframes camino{to{background-position:-56px 0}}
+.auto{position:absolute;left:22px;bottom:56px;font-size:50px;transform:scaleX(-1);line-height:1}
+.obs{position:absolute;bottom:56px;font-size:38px;line-height:1}
+.escuela{position:absolute;right:6px;bottom:56px;font-size:80px;line-height:1}
+.aviso{position:absolute;top:14px;left:0;right:0;font-weight:800;color:#a24b57;opacity:0;transition:opacity .3s}
+.aviso.on{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
 </style>
 </head>
-
 <body>
 
-<!-- =========================
-     INICIO
-========================= -->
+<div class="toast" id="toast">¡Misión cumplida! ✨</div>
 
-<section id="inicio" class="screen active">
-  <div class="content">
-    <h1>MAMÁ</h1>
-
-    <p class="subtitle">
-      Una pequeña aventura hecha especialmente para vos.
-    </p>
-
-    <button class="primary" onclick="showScreen('historia')">
-      COMENZAR
-    </button>
-  </div>
+<section class="screen active" id="inicio">
+  <h1>MAMÁ</h1>
+  <p>Una aventura hecha especialmente para vos.</p>
+  <button class="btn" id="btnComenzar">COMENZAR</button>
 </section>
 
-
-<!-- =========================
-     HISTORIA
-========================= -->
-
-<section id="historia" class="screen">
-  <div class="content">
-
-    <h2>Antes de empezar...</h2>
-
-    <img
-      class="photo"
-      src="assets/foto1.jpg"
-      alt="Recuerdo de mamá y Fede"
-    >
-
-    <div class="history-card">
-      <p class="history-text">
-        Antes de llegar hasta acá hubo muchísimos momentos,
-        días, risas, aprendizajes y recuerdos.
-        <br><br>
-        Y en todos ellos hubo algo que siempre estuvo:
-        vos.
-      </p>
-    </div>
-
-    <img
-      class="photo"
-      src="assets/foto2.jpg"
-      alt="Recuerdo de mamá y Fede"
-    >
-
-    <button onclick="showScreen('recuerdos')">
-      SEGUIR
-    </button>
-
-  </div>
+<section class="screen" id="historia">
+  <img class="foto" id="fotoHistoria" src="assets/foto1.jpg" alt="Recuerdo">
+  <p class="frase" id="frase">Desde el primer día, tu abrazo fue mi lugar favorito.</p>
+  <p class="frase" id="frase">Desde el primer día, tu abrazo fue mi lugar favorito.</p>
+  <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
+  <button class="btn" id="btnSiguiente">SIGUIENTE</button>
 </section>
 
-
-<!-- =========================
-     RECUERDOS
-========================= -->
-
-<section id="recuerdos" class="screen">
-  <div class="content">
-
-    <h2>Recuerdos</h2>
-
-    <p>
-      Hay algunos recuerdos escondidos.
-      Tocá los tres para descubrir qué tenés que hacer.
-    </p>
-
-    <div class="memory-grid">
-
-      <div class="memory" id="memory1" onclick="openMemory(1)">
-        <div class="icon">📖</div>
-        <strong>ÁLBUM</strong>
-        <p>Un recuerdo de hace muchos años.</p>
-      </div>
-
-      <div class="memory" id="memory2" onclick="openMemory(2)">
-        <div class="icon">💌</div>
-        <strong>CARTA</strong>
-        <p>Algo que quiero decirte.</p>
-      </div>
-
-      <div class="memory" id="memory3" onclick="openMemory(3)">
-        <div class="icon">🧸</div>
-        <strong>INFANCIA</strong>
-        <p>Una pista sobre todo lo que hacés por mí.</p>
-      </div>
-
-    </div>
-
-    <p id="memoryMessage"></p>
-
-    <button
-      id="memoryContinue"
-      class="locked"
-      disabled
-      onclick="showScreen('misiones')"
-    >
-      CONTINUAR
-    </button>
-
+<section class="screen" id="recuerdos">
+  <h2>Nuestros recuerdos</h2>
+  <p>Tocá cada uno para abrirlo.</p>
+  <div class="cards">
+    <button class="card" data-r="album"><span>📖</span><div>ÁLBUM<small>Fotos que cuentan nuestra historia</small></div></button>
+    <button class="card" data-r="carta"><span>💌</span><div>CARTA<small>Palabras que se guardan</small></div></button>
+    <button class="card" data-r="infancia"><span>🧸</span><div>INFANCIA<small>Todo lo que hiciste por mí</small></div></button>
   </div>
+  <button class="btn hidden" id="btnContinuar">CONTINUAR</button>
 </section>
 
-
-<!-- =========================
-     MISIONES
-========================= -->
-
-<section id="misiones" class="screen">
-  <div class="content">
-
-    <h2>Las misiones de mamá</h2>
-
-    <p>
-      Hay cosas que hacés todos los días por mí.
-      Ahora me toca intentar hacerlas a mí.
-    </p>
-
-    <div class="mission-list">
-
-      <div class="mission" id="mission-breakfast">
-        <span>🥣 Prepararme el desayuno</span>
-        <span class="check">🔒</span>
-      </div>
-
-      <div class="mission" id="mission-school">
-        <span>🎒 Llevarme al colegio</span>
-        <span class="check">🔒</span>
-      </div>
-
-      <div class="mission" id="mission-room">
-        <span>🧹 Ordenar mi habitación</span>
-        <span class="check">🔒</span>
-      </div>
-
-      <div class="mission" id="mission-wakeup">
-        <span>⏰ Despertarme para ir al cole</span>
-        <span class="check">🔒</span>
-      </div>
-
-      <div class="mission" id="mission-laundry">
-        <span>👕 Lavar mi ropa del cole</span>
-        <span class="check">🔒</span>
-      </div>
-
-    </div>
-
-    <button onclick="startNextMission()">
-      EMPEZAR MISIONES
-    </button>
-
-  </div>
+<section class="screen" id="misiones">
+  <h2>Misiones</h2>
+  <div class="hud" id="hud">0 / 5</div>
+  <div class="lista" id="lista"></div>
 </section>
 
-
-<!-- =========================
-     MINIJUEGO 1
-     DESAYUNO
-========================= -->
-
-<section id="desayuno" class="screen">
-  <div class="content">
-
-    <h2>🥣 Preparar el desayuno</h2>
-
-    <p>
-      Mamá tiene que preparar el desayuno.
-      ¡Agarrá la comida antes de que caiga!
-    </p>
-
-    <div class="score">
-      Comida: <span id="foodScore">0</span> / 10
-    </div>
-
-    <div id="foodGame" class="game-area"></div>
-
-    <button onclick="startBreakfast()">
-      REINICIAR
-    </button>
-
-  </div>
+<section class="screen" id="g-desayuno">
+  <h2>🥣 Desayuno</h2><p>Atrapá los 6 ingredientes.</p>
+  <div class="stage" id="stDes"></div>
+  <div class="bar"><i id="bDes"></i></div>
 </section>
 
-
-<!-- =========================
-     MINIJUEGO 2
-     COLEGIO
-========================= -->
-
-<section id="colegio" class="screen">
-  <div class="content">
-
-    <h2>🎒 Ir al colegio</h2>
-
-    <p>
-      Llevá a Fede hasta el colegio evitando los obstáculos.
-    </p>
-
-    <div class="school-game" id="schoolGame">
-
-      <div id="player" class="player">🧒</div>
-
-      <div class="school">🏫</div>
-
-      <div class="obstacle" style="left:30%; bottom:65px;">
-        🪨
-      </div>
-
-      <div class="obstacle" style="left:55%; bottom:65px;">
-        🌳
-      </div>
-
-      <div class="obstacle" style="left:75%; bottom:65px;">
-        🚧
-      </div>
-
-    </div>
-
-    <div class="controls">
-      <button class="control-btn" onclick="movePlayer(-1)">◀</button>
-      <button class="control-btn" onclick="movePlayer(1)">▶</button>
-    </div>
-
-    <p>
-      También podés usar las flechas del teclado.
-    </p>
-
-  </div>
+<section class="screen" id="g-colegio">
+  <h2>🚗 Al colegio</h2><p>Tocá para saltar piedras, pozos y conos. ¡Llegá a la escuela!</p>
+  <div class="stage" id="stCol"><div class="aviso" id="aviso">¡Chocaste! Probá de nuevo</div><div class="ruta"></div><div class="auto" id="auto">🚗</div></div>
+  <div class="bar"><i id="bCol"></i></div>
+  <button class="btn" id="btnSaltar">SALTAR</button>
 </section>
 
-
-<!-- =========================
-     MINIJUEGO 3
-     DESPERTAR
-========================= -->
-
-<section id="despertar" class="screen">
-  <div class="content">
-
-    <h2>⏰ Despertarme para ir al cole</h2>
-
-    <p>
-      Fede no quiere despertarse...
-      ¡Tocá varias veces para despertarlo!
-    </p>
-
-    <div id="wakeupCharacter" class="wakeup-character">
-      😴
-    </div>
-
-    <div class="wakeup-progress">
-      <div id="wakeupBar" class="wakeup-bar"></div>
-    </div>
-
-    <p>
-      Despertado: <span id="wakeScore">0</span> / 8
-    </p>
-
-    <button onclick="wakeUp()">
-      ¡DESPERTAR!
-    </button>
-
-  </div>
+<section class="screen" id="g-habitacion">
+  <h2>🧹 Mi habitación</h2><p>Tocá cada objeto para ordenarlo.</p>
+  <div class="stage"><div class="hab" id="hab"></div><div class="zona" id="zona"></div></div>
+  <div class="bar"><i id="bHab"></i></div>
 </section>
 
-
-<!-- =========================
-     MINIJUEGO 4
-     ROPA
-========================= -->
-
-<section id="ropa" class="screen">
-  <div class="content">
-
-    <h2>👕 Lavar la ropa del cole</h2>
-
-    <p>
-      Meté la ropa en el lavarropas.
-    </p>
-
-    <div class="washer">
-
-      <div id="washerDoor" class="washer-door">
-        🫧
-      </div>
-
-      <div class="clothes">
-
-        <button id="shirt" onclick="putClothes('shirt')">
-          👕 Remera
-        </button>
-
-        <button id="pants" onclick="putClothes('pants')">
-          👖 Pantalón
-        </button>
-
-        <button id="sock" onclick="putClothes('sock')">
-          🧦 Media
-        </button>
-
-        <button id="shoe" onclick="putClothes('shoe')">
-          👟 Zapatilla
-        </button>
-
-      </div>
-
-      <p>
-        Prendas: <span id="clothesScore">0</span> / 3
-      </p>
-
-      <button id="washButton" class="locked" disabled onclick="startWash()">
-        🌀 EMPEZAR LAVADO
-      </button>
-
-    </div>
-
-  </div>
+<section class="screen" id="g-despertar">
+  <h2>⏰ A despertar</h2><p>Tocá el reloj o mi cara para despertarme.</p>
+  <div class="stage"><div class="par"><span class="reloj" id="reloj">⏰</span><span class="cara" id="cara">😴</span></div></div>
+  <div class="bar"><i id="bDesp"></i></div>
+  <button class="btn" id="btnDespertar">¡DESPERTAR!</button>
 </section>
 
-
-<!-- =========================
-     MINIJUEGO 5
-     HABITACIÓN
-========================= -->
-
-<section id="cuarto" class="screen">
-  <div class="content">
-
-    <h2>🧹 Ordenar mi habitación</h2>
-
-    <p>
-      Tocá todas las cosas que están tiradas.
-    </p>
-
-    <div id="roomGame" class="room">
-
-      <div class="room-item" style="left:10%;top:20%;" onclick="sortItem(this)">
-        👕
-      </div>
-
-      <div class="room-item" style="left:45%;top:15%;" onclick="sortItem(this)">
-        📚
-      </div>
-
-      <div class="room-item" style="left:75%;top:30%;" onclick="sortItem(this)">
-        🧸
-      </div>
-
-      <div class="room-item" style="left:25%;top:65%;" onclick="sortItem(this)">
-        🎮
-      </div>
-
-      <div class="room-item" style="left:70%;top:70%;" onclick="sortItem(this)">
-        👟
-      </div>
-
-    </div>
-
-    <p>
-      Ordenado: <span id="roomScore">0</span> / 5
-    </p>
-
-  </div>
+<section class="screen" id="g-ropa">
+  <h2>👕 Lavar la ropa</h2><p>Tocá la ropa para meterla al lavarropas.</p>
+  <div class="stage"><div class="ropa" id="ropa"></div><div class="lava" id="lava"><div class="puerta"><span id="lavaIc">🫧</span></div></div></div>
+  <div class="bar"><i id="bRopa"></i></div>
 </section>
 
-
-<!-- =========================
-     NIVEL SECRETO
-========================= -->
-
-<section id="secreto" class="screen">
-  <div class="content">
-
-    <div class="secret-box">
-
-      <h2>🔐 NIVEL SECRETO</h2>
-
-      <div class="gift">🎁</div>
-
-      <p>
-        Completaste todas las misiones.
-      </p>
-
-      <p>
-        Pero todavía falta una última misión...
-      </p>
-
-      <h3>Encontrar el regalo.</h3>
-
-      <p>
-        Para conseguirlo vas a tener que seguir
-        una serie de pistas por la casa.
-      </p>
-
-      <button onclick="showScreen('pista1')">
-        COMENZAR BÚSQUEDA
-      </button>
-
-    </div>
-
-  </div>
+<section class="screen" id="secreto">
+  <div class="chispas"></div>
+  <h2>NIVEL SECRETO</h2>
+  <div class="regalo">🎁</div>
+  <p>Encontrar el regalo</p>
+  <button class="btn oro" id="btnSecreto">EMPEZAR</button>
 </section>
 
-
-<!-- =========================
-     PISTA 1
-========================= -->
-
-<section id="pista1" class="screen">
-  <div class="content">
-
-    <h2>🔎 Pista 1</h2>
-
-    <div class="clue">
-
-      <p>
-        Acá podés mirarte y ver a la persona que me cuida
-        todos los días.
-      </p>
-
-      <p>
-        Pero para seguir jugando, tenés que mirar más abajo,
-        donde los libros y fotos guardan recuerdos.
-      </p>
-
-    </div>
-
-    <button onclick="showScreen('pista2')">
-      ENCONTRÉ LA PISTA 1
-    </button>
-
-  </div>
+<section class="screen" id="pista1">
+  <div class="papel"><h3>Pista 1</h3><p>Acá podés mirarte y ver a la persona que me cuida todos los días. Pero para seguir jugando, tenés que mirar más abajo, donde los libros y fotos guardan recuerdos.</p></div>
+  <button class="btn" id="btnP1">ENCONTRÉ LA PISTA 1</button>
 </section>
 
-
-<!-- =========================
-     PISTA 2
-========================= -->
-
-<section id="pista2" class="screen">
-  <div class="content">
-
-    <h2>🔎 Pista 2</h2>
-
-    <div class="clue">
-
-      <p>
-        Nos sentamos a compartir charlas, risas y momentos ricos.
-      </p>
-
-      <p>
-        Buscá la próxima pista cerca de las flores
-        que siempre llenan de vida este lugar.
-      </p>
-
-    </div>
-
-    <button onclick="showScreen('pista3')">
-      ENCONTRÉ LA PISTA 2
-    </button>
-
-  </div>
+<section class="screen" id="pista2">
+  <div class="papel"><h3>Pista 2</h3><p>Nos sentamos a compartir charlas, risas y momentos ricos. Buscá la próxima pista cerca de las flores que siempre llenan de vida este lugar.</p></div>
+  <button class="btn" id="btnP2">ENCONTRÉ LA PISTA 2</button>
 </section>
 
-
-<!-- =========================
-     PISTA 3
-========================= -->
-
-<section id="pista3" class="screen">
-  <div class="content">
-
-    <h2>🔎 Última pista</h2>
-
-    <div class="clue">
-
-      <p>
-        Acá solemos ver series, partidos o películas en familia,
-        pero hoy el verdadero premio no está en la pantalla...
-      </p>
-
-      <p>
-        ¡Fijate bien cerquita de la tele para descubrir
-        dónde está el regalo de mamá!
-      </p>
-
-    </div>
-
-    <button onclick="showScreen('carta')">
-      ENCONTRÉ EL REGALO 🎁
-    </button>
-
-  </div>
+<section class="screen" id="pista3">
+  <div class="papel"><h3>Pista 3</h3><p>Acá solemos ver series, partidos o películas en familia, pero hoy el verdadero premio no está en la pantalla… ¡Fijate bien cerquita de la tele para descubrir dónde está el regalo de mamá!</p></div>
+  <button class="btn oro" id="btnP3">ENCONTRÉ EL REGALO 🎁</button>
 </section>
 
-
-<!-- =========================
-     CARTA FINAL
-========================= -->
-
-<section id="carta" class="screen">
-  <div class="content">
-
-    <div class="letter">
-
-      <h2>❤️ Para mamá</h2>
-
-      <p>
-        ¡Feliz día de la madre!
-      </p>
-
-      <p>
-        Gracias por dedicar tu vida a cuidarme,
-        a entenderme, a enseñarme y a protegerme.
-      </p>
-
-      <p>
-        Te quiero muchísimo.
-      </p>
-
-      <p>
-        ❤️
-      </p>
-
-      <button onclick="showScreen('mensaje')">
-        FINALIZAR
-      </button>
-
-    </div>
-
+<section class="screen" id="carta">
+  <div class="carta">
+    <h2>¡Feliz día de la madre!</h2>
+    <p>Gracias por dedicar tu vida a cuidarme, a entenderme, a enseñarme y a protegerme.</p>
+    <p>Te quiero muchísimo.</p>
   </div>
+  <button class="btn" id="btnCartaFin">CONTINUAR</button>
 </section>
 
-
-<!-- =========================
-     FINAL
-========================= -->
-
-<section id="mensaje" class="screen">
-  <div class="content">
-
-    <h1>❤️</h1>
-
-    <h2>¡Feliz día, mamá!</h2>
-
-    <p>
-      Gracias por todo.
-    </p>
-
-    <p>
-      Esta aventura fue solamente una pequeña forma
-      de decirte cuánto te quiero.
-    </p>
-
-  </div>
+<section class="screen final" id="final">
+  <div class="corazon">❤️</div>
+  <h2>¡Feliz día, mamá!</h2>
+  <h3>Gracias por todo.</h3>
+  <p>Esta aventura fue solamente una pequeña forma de decirte cuánto te quiero.</p>
 </section>
-
 
 <script>
-
-/* =====================================================
-   SISTEMA DE PANTALLAS
-===================================================== */
-
-function showScreen(id) {
-
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
-  });
-
-  const screen = document.getElementById(id);
-
-  if (screen) {
-    screen.classList.add("active");
-    window.scrollTo(0, 0);
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  function show(id){
+    var a=document.querySelector('.screen.active'); if(a)a.classList.remove('active');
+    $(id).classList.add('active'); $(id).scrollTop=0;
   }
+  function rnd(a,b){return a+Math.random()*(b-a)}
 
-  if (id === "desayuno") {
-    startBreakfast();
-  }
+  /* INICIO */
+  $('btnComenzar').onclick=function(){show('historia')};
 
-  if (id === "colegio") {
-    resetSchool();
-  }
-
-  if (id === "despertar") {
-    resetWakeUp();
-  }
-
-  if (id === "ropa") {
-    resetLaundry();
-  }
-
-  if (id === "cuarto") {
-    resetRoom();
-  }
-}
-
-
-/* =====================================================
-   RECUERDOS
-===================================================== */
-
-let memoriesOpened = 0;
-
-function openMemory(number) {
-
-  const memory = document.getElementById("memory" + number);
-
-  if (!memory.classList.contains("opened")) {
-
-    memory.classList.add("opened");
-    memoriesOpened++;
-
-    const messages = {
-      1: "Hay muchísimos recuerdos que guardo con vos.",
-      2: "Siempre estuviste para escucharme y ayudarme.",
-      3: "Desde chico hiciste un montón de cosas por mí."
-    };
-
-    document.getElementById("memoryMessage").textContent =
-      messages[number];
-
-  }
-
-  if (memoriesOpened >= 3) {
-
-    const button = document.getElementById("memoryContinue");
-
-    button.disabled = false;
-    button.classList.remove("locked");
-  }
-}
-
-
-/* =====================================================
-   MISIONES
-===================================================== */
-
-const missions = {
-  breakfast: false,
-  school: false,
-  room: false,
-  wakeup: false,
-  laundry: false
-};
-
-const missionOrder = [
-  "breakfast",
-  "school",
-  "wakeup",
-  "laundry",
-  "room"
-];
-
-let currentMissionIndex = 0;
-
-function startNextMission() {
-
-  while (
-    currentMissionIndex < missionOrder.length &&
-    missions[missionOrder[currentMissionIndex]]
-  ) {
-    currentMissionIndex++;
-  }
-
-  if (currentMissionIndex >= missionOrder.length) {
-    showScreen("secreto");
-    return;
-  }
-
-  const next = missionOrder[currentMissionIndex];
-
-  const screens = {
-    breakfast: "desayuno",
-    school: "colegio",
-    wakeup: "despertar",
-    laundry: "ropa",
-    room: "cuarto"
+  /* HISTORIA */
+  var fotos=['assets/foto1.jpg','assets/foto2.jpg','assets/foto3.jpg'], fi=0;
+  var frases=['Desde el primer día, tu abrazo fue mi lugar favorito.','Cada momento a tu lado se volvió un recuerdo que guardo con amor.','Gracias por ser mi casa, mi guía y mi mejor compañera.'];
+  var frases=['Desde el primer día, tu abrazo fue mi lugar favorito.','Cada momento a tu lado se volvió un recuerdo que guardo con cariño.','Gracias por ser mi casa, mi guía y mi mejor compañía.'];
+  var img=$('fotoHistoria');
+  img.onerror=function(){img.style.background='linear-gradient(135deg,#e8c4c9,#e9dcc8)'};
+  $('btnSiguiente').onclick=function(){
+    fi++;
+    if(fi>=fotos.length){show('recuerdos');return}
+    img.style.setProperty('--r',(fi%2?'1.5deg':'-1.5deg'));
+    img.style.animation='none'; void img.offsetWidth; img.style.animation='';
+    img.src=fotos[fi];
+    var fr=$('frase'); fr.textContent=frases[fi]; fr.style.animation='none'; void fr.offsetWidth; fr.style.animation='';
+    var d=$('dots').children; for(var i=0;i<d.length;i++)d[i].className=i===fi?'on':'';
+    if(fi===fotos.length-1)$('btnSiguiente').textContent='CONTINUAR';
   };
 
-  showScreen(screens[next]);
-}
-
-
-function completeMission(name) {
-
-  if (missions[name]) return;
-
-  missions[name] = true;
-
-  const missionElement =
-    document.getElementById("mission-" + name);
-
-  if (missionElement) {
-
-    missionElement.classList.add("done");
-
-    const check =
-      missionElement.querySelector(".check");
-
-    if (check) {
-      check.textContent = "✓";
-    }
-  }
-
-  currentMissionIndex++;
-
-  setTimeout(() => {
-
-    const allDone =
-      Object.values(missions).every(value => value === true);
-
-    if (allDone) {
-      showScreen("secreto");
-    } else {
-      showScreen("misiones");
-    }
-
-  }, 700);
-}
-
-
-/* =====================================================
-   MINIJUEGO 1 — DESAYUNO
-===================================================== */
-
-let foodScore = 0;
-let foodInterval = null;
-
-const goodFoods = [
-  "🥣",
-  "🥛",
-  "🍞",
-  "🍎",
-  "🍌",
-  "🥐",
-  "🍪"
-];
-
-const badFoods = [
-  "🧦",
-  "📱",
-  "🧸"
-];
-
-function startBreakfast() {
-
-  clearInterval(foodInterval);
-
-  foodScore = 0;
-
-  document.getElementById("foodScore").textContent = "0";
-
-  const game =
-    document.getElementById("foodGame");
-
-  game.innerHTML = "";
-
-  foodInterval = setInterval(createFood, 650);
-}
-
-
-function createFood() {
-
-  const game =
-    document.getElementById("foodGame");
-
-  if (foodScore >= 10) {
-    clearInterval(foodInterval);
-    return;
-  }
-
-  const item = document.createElement("div");
-
-  item.className = "food";
-
-  const isGood =
-    Math.random() > .22;
-
-  item.textContent =
-    isGood
-      ? goodFoods[Math.floor(Math.random() * goodFoods.length)]
-      : badFoods[Math.floor(Math.random() * badFoods.length)];
-
-  item.dataset.good = isGood ? "true" : "false";
-
-  item.style.left =
-    Math.random() * 85 + "%";
-
-  item.style.animationDuration =
-    (2 + Math.random() * 2) + "s";
-
-  item.addEventListener("click", () => {
-
-    if (item.dataset.good === "true") {
-
-      foodScore++;
-
-      document.getElementById("foodScore").textContent =
-        foodScore;
-
-      item.remove();
-
-      if (foodScore >= 10) {
-
-        clearInterval(foodInterval);
-
-        setTimeout(() => {
-          completeMission("breakfast");
-        }, 500);
-      }
-
-    } else {
-
-      item.style.opacity = "0";
-      item.remove();
-
-    }
-
+  /* RECUERDOS */
+  var vistos={};
+  Array.prototype.forEach.call(document.querySelectorAll('.card'),function(c){
+    c.onclick=function(){
+      c.classList.add('vista'); vistos[c.getAttribute('data-r')]=1;
+      if(Object.keys(vistos).length===3)$('btnContinuar').classList.remove('hidden');
+    };
   });
+  $('btnContinuar').onclick=function(){renderMisiones();show('misiones')};
 
-  game.appendChild(item);
+  /* MISIONES */
+  var M=[
+    {t:'🥣 Prepararme el desayuno',g:'g-desayuno',i:initDes},
+    {t:'🎒 Llevarme al colegio',g:'g-colegio',i:initCol},
+    {t:'🧹 Ordenar mi habitación',g:'g-habitacion',i:initHab},
+    {t:'⏰ Despertarme para ir al cole',g:'g-despertar',i:initDesp},
+    {t:'👕 Lavar mi ropa del cole',g:'g-ropa',i:initRopa}
+  ], hecho=[false,false,false,false,false];
+  function renderMisiones(){
+    var l=$('lista'); l.innerHTML=''; var n=0;
+    M.forEach(function(m,k){
+      if(hecho[k])n++;
+      var b=document.createElement('button');
+      var lock=k>0&&!hecho[k-1]&&!hecho[k];
+      b.className='mis'+(hecho[k]?' ok':'')+(lock?' lock':'');
+      b.innerHTML='<b>'+(k+1)+'</b><span>'+m.t+'</span><em>'+(hecho[k]?'✅':lock?'🔒':'▶')+'</em>';
+      b.onclick=function(){m.i();show(m.g)};
+      l.appendChild(b);
+    });
+    $('hud').textContent=n+' / 5';
+  }
+  function completar(k){
+    hecho[k]=true;
+    var t=$('toast'); t.classList.add('on');
+    setTimeout(function(){
+      t.classList.remove('on');
+      if(hecho.every(Boolean))show('secreto'); else{renderMisiones();show('misiones')}
+    },1100);
+  }
+  function barra(id,p){$(id).style.width=Math.min(100,p)+'%'}
 
-  setTimeout(() => {
-    if (item.parentNode) {
-      item.remove();
+  /* 1. DESAYUNO */
+  function initDes(){
+    var s=$('stDes'); s.innerHTML=''; barra('bDes',0);
+    var ing=['🥛','☕','🍞','🍳','🍊','🥐'], n=0;
+    ing.forEach(function(e,k){
+      var b=document.createElement('button'); b.className='item cae'; b.innerHTML='<span>'+e+'</span>';
+      b.style.left=(6+k*14)+'%'; b.style.setProperty('--d',rnd(2.6,4)+'s'); b.style.animationDelay=(-rnd(0,3))+'s';
+      b.onclick=function(){
+        b.classList.add('hit'); n++; barra('bDes',n/ing.length*100);
+        if(n===ing.length)completar(0);
+      };
+      s.appendChild(b);
+    });
+  }
+
+  /* 2. COLEGIO (estilo dinosaurio) */
+  var col={on:false,y:0,vy:0,obs:[],n:0,last:0,next:0,raf:0}, META=8;
+  function initCol(){
+    cancelAnimationFrame(col.raf);
+    col.obs.forEach(function(o){o.el.remove()}); col.obs=[];
+    var old=document.getElementById('escuela'); if(old)old.remove();
+    col.n=0; col.y=0; col.vy=0; col.on=true; col.last=performance.now(); col.next=900;
+    $('auto').style.bottom='56px'; barra('bCol',0);
+    col.raf=requestAnimationFrame(loopCol);
+  }
+  function saltar(){ if(col.on&&col.y===0)col.vy=640; }
+  function loopCol(t){
+    if(!col.on||!$('g-colegio').classList.contains('active'))return;
+    var st=$('stCol'), W=st.clientWidth, dt=Math.min(.04,(t-col.last)/1000); col.last=t;
+    col.vy-=1800*dt; col.y+=col.vy*dt; if(col.y<=0){col.y=0;col.vy=0}
+    $('auto').style.bottom=(56+col.y)+'px';
+    col.next-=dt*1000;
+    if(col.next<=0&&col.n+col.obs.length<META){
+      var e=document.createElement('div'); e.className='obs'; e.textContent=['🪨','🕳️','🚧','🪨'][Math.floor(Math.random()*4)];
+      st.appendChild(e); col.obs.push({el:e,x:W}); col.next=rnd(1100,1900);
     }
-  }, 4500);
-}
-
-
-/* =====================================================
-   MINIJUEGO 2 — COLEGIO
-===================================================== */
-
-let playerPosition = 40;
-let schoolFinished = false;
-
-function resetSchool() {
-
-  playerPosition = 40;
-  schoolFinished = false;
-
-  const player =
-    document.getElementById("player");
-
-  player.style.left = playerPosition + "px";
-}
-
-
-function movePlayer(direction) {
-
-  if (schoolFinished) return;
-
-  playerPosition += direction * 18;
-
-  const game =
-    document.getElementById("schoolGame");
-
-  const max =
-    game.clientWidth - 85;
-
-  playerPosition =
-    Math.max(10, Math.min(max, playerPosition));
-
-  const player =
-    document.getElementById("player");
-
-  player.style.left =
-    playerPosition + "px";
-
-  if (playerPosition >= max - 10) {
-
-    schoolFinished = true;
-
-    setTimeout(() => {
-      completeMission("school");
-    }, 500);
-  }
-}
-
-
-document.addEventListener("keydown", function(event) {
-
-  const active =
-    document.getElementById("colegio").classList.contains("active");
-
-  if (!active) return;
-
-  if (event.key === "ArrowRight") {
-    movePlayer(1);
-  }
-
-  if (event.key === "ArrowLeft") {
-    movePlayer(-1);
-  }
-});
-
-
-/* =====================================================
-   MINIJUEGO 3 — DESPERTAR
-===================================================== */
-
-let wakeScore = 0;
-
-function resetWakeUp() {
-
-  wakeScore = 0;
-
-  document.getElementById("wakeScore").textContent = "0";
-  document.getElementById("wakeupBar").style.width = "0%";
-  document.getElementById("wakeupCharacter").textContent = "😴";
-}
-
-
-function wakeUp() {
-
-  if (wakeScore >= 8) return;
-
-  wakeScore++;
-
-  document.getElementById("wakeScore").textContent =
-    wakeScore;
-
-  document.getElementById("wakeupBar").style.width =
-    (wakeScore / 8 * 100) + "%";
-
-  const character =
-    document.getElementById("wakeupCharacter");
-
-  if (wakeScore < 3) {
-    character.textContent = "😴";
-  } else if (wakeScore < 6) {
-    character.textContent = "🥱";
-  } else if (wakeScore < 8) {
-    character.textContent = "😳";
-  } else {
-
-    character.textContent = "😄";
-
-    setTimeout(() => {
-      completeMission("wakeup");
-    }, 500);
-  }
-}
-
-
-/* =====================================================
-   MINIJUEGO 4 — ROPA
-===================================================== */
-
-let clothesPlaced = 0;
-
-const clothesUsed = {
-  shirt: false,
-  pants: false,
-  sock: false
-};
-
-
-function resetLaundry() {
-
-  clothesPlaced = 0;
-
-  clothesUsed.shirt = false;
-  clothesUsed.pants = false;
-  clothesUsed.sock = false;
-
-  document.getElementById("clothesScore").textContent = "0";
-
-  ["shirt", "pants", "sock"].forEach(id => {
-
-    const button =
-      document.getElementById(id);
-
-    button.classList.remove("used");
-    button.disabled = false;
-
-  });
-
-  const wash =
-    document.getElementById("washButton");
-
-  wash.disabled = true;
-  wash.classList.add("locked");
-
-  document.getElementById("washerDoor").textContent = "🫧";
-}
-
-
-function putClothes(type) {
-
-  if (type === "shoe") {
-    return;
-  }
-
-  if (clothesUsed[type]) {
-    return;
-  }
-
-  clothesUsed[type] = true;
-  clothesPlaced++;
-
-  const button =
-    document.getElementById(type);
-
-  button.classList.add("used");
-  button.disabled = true;
-
-  document.getElementById("clothesScore").textContent =
-    clothesPlaced;
-
-  if (clothesPlaced >= 3) {
-
-    const wash =
-      document.getElementById("washButton");
-
-    wash.disabled = false;
-    wash.classList.remove("locked");
-  }
-}
-
-
-function startWash() {
-
-  if (clothesPlaced < 3) return;
-
-  const door =
-    document.getElementById("washerDoor");
-
-  door.textContent = "🌀";
-
-  setTimeout(() => {
-    door.textContent = "✨";
-
-    setTimeout(() => {
-      completeMission("laundry");
-    }, 700);
-
-  }, 1600);
-}
-
-
-/* =====================================================
-   MINIJUEGO 5 — HABITACIÓN
-===================================================== */
-
-let roomScore = 0;
-
-function resetRoom() {
-
-  roomScore = 0;
-
-  document.getElementById("roomScore").textContent = "0";
-
-  document.querySelectorAll(".room-item").forEach(item => {
-    item.classList.remove("sorted");
-  });
-}
-
-
-function sortItem(item) {
-
-  if (item.classList.contains("sorted")) {
-    return;
-  }
-
-  item.classList.add("sorted");
-
-  roomScore++;
-
-  document.getElementById("roomScore").textContent =
-    roomScore;
-
-  if (roomScore >= 5) {
-
-    setTimeout(() => {
-      completeMission("room");
-    }, 600);
-  }
-}
-
-
-/* =====================================================
-   INICIO
-===================================================== */
-
-updateMissionDisplay();
-
-
-function updateMissionDisplay() {
-
-  Object.keys(missions).forEach(name => {
-
-    const element =
-      document.getElementById("mission-" + name);
-
-    if (!element) return;
-
-    if (missions[name]) {
-
-      element.classList.add("done");
-
-      const check =
-        element.querySelector(".check");
-
-      if (check) {
-        check.textContent = "✓";
-      }
+    var speed=230, hit=false;
+    for(var i=col.obs.length-1;i>=0;i--){
+      var o=col.obs[i]; o.x-=speed*dt; o.el.style.left=o.x+'px';
+      if(o.x<62&&o.x>20&&col.y<26)hit=true;
+      if(o.x<-50){o.el.remove();col.obs.splice(i,1);col.n++;barra('bCol',col.n/META*100)}
     }
-  });
-}
+    if(hit){
+      col.obs.forEach(function(o){o.el.remove()}); col.obs=[]; col.n=0; col.next=1200; barra('bCol',0);
+      var a=$('aviso'); a.classList.add('on'); setTimeout(function(){a.classList.remove('on')},1100);
+    }
+    if(col.n>=META){
+      col.on=false; var sc=document.createElement('div'); sc.id='escuela'; sc.className='escuela'; sc.textContent='🏫'; st.appendChild(sc);
+      completar(1); return;
+    }
+    col.raf=requestAnimationFrame(loopCol);
+  }
+  $('stCol').addEventListener('pointerdown',saltar);
+  $('btnSaltar').addEventListener('pointerdown',function(e){e.preventDefault();saltar()});
 
+  /* 3. HABITACIÓN */
+  function initHab(){
+    var h=$('hab'),z=$('zona'); h.innerHTML='';z.innerHTML='';barra('bHab',0);
+    var objs=['🧸','📚','👟','🎨','🧦'], n=0;
+    objs.forEach(function(e){
+      var b=document.createElement('button'); b.className='item'; b.textContent=e;
+      b.style.position='static'; b.style.transform='rotate('+rnd(-25,25)+'deg)';
+      b.onclick=function(){
+        if(b.dataset.ok)return; b.dataset.ok=1;
+        b.style.transition='all .3s'; b.style.transform='scale(0)';
+        setTimeout(function(){
+          b.remove();
+          var c=document.createElement('span'); c.className='item'; c.textContent=e; z.appendChild(c);
+        },280);
+        n++; barra('bHab',n/objs.length*100);
+        if(n===objs.length)completar(2);
+      };
+      h.appendChild(b);
+    });
+  }
+
+  /* 4. DESPERTAR */
+  var dp=0, caras=['😴','😑','😠','😩','🫩'];
+  function initDesp(){dp=0;barra('bDesp',0);$('cara').textContent=caras[0];$('reloj').textContent='⏰'}
+  function tapDesp(){
+    if(dp>=100)return; dp+=10; barra('bDesp',dp);
+    var r=$('reloj'), c=$('cara');
+    r.classList.remove('shake'); c.classList.remove('rebota'); void r.offsetWidth;
+    r.classList.add('shake'); c.classList.add('rebota');
+    if(dp>=100){r.textContent='☀️';c.textContent='😊';completar(3)}
+    else c.textContent=caras[(dp/10)%caras.length];
+  }
+  $('btnDespertar').onclick=tapDesp; $('cara').onclick=tapDesp; $('reloj').onclick=tapDesp;
+
+  /* 5. ROPA */
+  function initRopa(){
+    var r=$('ropa'); r.innerHTML=''; barra('bRopa',0); $('lava').classList.remove('gira');
+    var prendas=['👕','👖','🧦','🩳','🧥'], n=0;
+    prendas.forEach(function(e){
+      var b=document.createElement('button'); b.className='item'; b.textContent=e;
+      b.style.position='static'; b.style.fontSize='38px'; b.style.padding='2px';
+      b.onclick=function(){
+        b.classList.add('pop'); n++; barra('bRopa',n/prendas.length*100);
+        if(n===prendas.length){
+          $('lava').classList.add('gira');
+          setTimeout(function(){completar(4)},1600);
+        }
+      };
+      r.appendChild(b);
+    });
+  }
+
+  /* SECRETO, PISTAS, CARTA, FINAL */
+  $('btnSecreto').onclick=function(){show('pista1')};
+  $('btnP1').onclick=function(){show('pista2')};
+  $('btnP2').onclick=function(){show('pista3')};
+  $('btnP3').onclick=function(){show('carta')};
+  $('btnCartaFin').onclick=function(){show('final')};
+})();
 </script>
-
 </body>
 </html>
