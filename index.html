@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mamá — Una aventura</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #111;
+  color: white;
+  min-height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 35px 20px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fade .4s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content {
+  width: min(850px, 100%);
+  margin: auto;
+}
+
+h1 {
+  font-size: clamp(42px, 10vw, 90px);
+  margin: 10px 0;
+  letter-spacing: 5px;
+}
+
+h2 {
+  font-size: clamp(28px, 6vw, 50px);
+  margin-bottom: 15px;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 15px 24px;
+  margin: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background: white;
+  color: #111;
+  transition: .2s;
+}
+
+button:hover {
+  transform: scale(1.04);
+}
+
+button:active {
+  transform: scale(.97);
+}
+
+.primary {
+  background: #fff;
+  color: #111;
+}
+
+.secondary {
+  background: #333;
+  color: white;
+}
+
+.locked {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+.photo {
+  width: min(650px, 95%);
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin: 20px auto;
+  display: block;
+  box-shadow: 0 15px 40px rgba(0,0,0,.35);
+}
+
+#inicio {
+  background:
+    linear-gradient(rgba(0,0,0,.38), rgba(0,0,0,.65)),
+    url("assets/foto-inicio.jpg") center/cover no-repeat;
+}
+
+#inicio .content {
+  padding: 40px 20px;
+}
+
+#inicio h1 {
+  text-shadow: 0 5px 20px rgba(0,0,0,.8);
+}
+
+.subtitle {
+  font-size: 20px;
+  margin-bottom: 35px;
+}
+
+/* HISTORIA */
+
+.history-card {
+  background: #1c1c1c;
+  padding: 25px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.history-text {
+  max-width: 650px;
+  margin: auto;
+}
+
+/* RECUERDOS */
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.memory {
+  background: #202020;
+  border-radius: 18px;
+  padding: 25px 15px;
+  cursor: pointer;
+  transition: .2s;
+  border: 1px solid #333;
+}
+
+.memory:hover {
+  transform: translateY(-5px);
+  background: #292929;
+}
+
+.memory .icon {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+.memory p {
+  font-size: 14px;
+}
+
+.memory.opened {
+  border-color: white;
+}
+
+/* MISIONES */
+
+.mission-list {
+  display: grid;
+  gap: 12px;
+  margin: 25px auto;
+  max-width: 600px;
+}
+
+.mission {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 20px;
+  background: #202020;
+  border-radius: 14px;
+  border: 1px solid #333;
+}
+
+.mission.done {
+  border-color: #777;
+  background: #292929;
+}
+
+.check {
+  font-size: 24px;
+}
+
+/* DESAYUNO */
+
+.game-area {
+  position: relative;
+  width: min(650px, 95%);
+  height: 500px;
+  margin: 25px auto;
+  background: #191919;
+  border: 2px solid #333;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.food {
+  position: absolute;
+  font-size: 42px;
+  cursor: pointer;
+  user-select: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(-70px);
+  }
+  to {
+    transform: translateY(570px);
+  }
+}
+
+.score {
+  font-size: 22px;
+  margin: 15px;
+}
+
+/* COLEGIO */
+
+.school-game {
+  width: min(700px, 95%);
+  height: 400px;
+  margin: 25px auto;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(#222 0 75%, #333 75%);
+  border: 2px solid #444;
+}
+
+.player {
+  position: absolute;
+  left: 40px;
+  bottom: 70px;
+  font-size: 45px;
+  transition: left .08s;
+}
+
+.school {
+  position: absolute;
+  right: 25px;
+  bottom: 55px;
+  font-size: 65px;
+}
+
+.obstacle {
+  position: absolute;
+  bottom: 65px;
+  font-size: 42px;
+}
+
+.controls {
+  margin-top: 15px;
+}
+
+.control-btn {
+  width: 65px;
+  height: 55px;
+  padding: 0;
+  font-size: 25px;
+}
+
+/* DESPERTAR */
+
+.wakeup-character {
+  font-size: 130px;
+  margin: 35px;
+  transition: .3s;
+}
+
+.wakeup-progress {
+  width: min(500px, 90%);
+  height: 20px;
+  background: #333;
+  border-radius: 20px;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+.wakeup-bar {
+  height: 100%;
+  width: 0%;
+  background: white;
+  transition: .2s;
+}
+
+/* ROPA */
+
+.washer {
+  width: min(500px, 90%);
+  margin: 25px auto;
+  padding: 30px;
+  background: #202020;
+  border-radius: 25px;
+}
+
+.washer-door {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 12px solid #555;
+  background: #111;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 55px;
+}
+
+.clothes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px;
+}
+
+.clothes button {
+  min-width: 110px;
+}
+
+.clothes button.used {
+  opacity: .25;
+}
+
+/* CUARTO */
+
+.room {
+  width: min(700px, 95%);
+  height: 430px;
+  background: #242424;
+  border-radius: 20px;
+  margin: 25px auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.room-item {
+  position: absolute;
+  font-size: 45px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.room-item:hover {
+  transform: scale(1.15);
+}
+
+.room-item.sorted {
+  opacity: 0;
+  transform: scale(.3);
+  pointer-events: none;
+}
+
+/* SECRETO */
+
+.secret-box {
+  background: #202020;
+  border: 1px solid #444;
+  padding: 35px 25px;
+  border-radius: 25px;
+  max-width: 650px;
+  margin: auto;
+}
+
+.gift {
+  font-size: 110px;
+  margin: 25px;
+}
+
+/* PISTAS */
+
+.clue {
+  background: #f1eee7;
+  color: #191919;
+  max-width: 650px;
+  margin: 25px auto;
+  padding: 35px 25px;
+  border-radius: 8px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.3);
+  font-family: Georgia, serif;
+}
+
+.clue p {
+  font-size: 20px;
+}
+
+/* CARTA */
+
+.letter {
+  max-width: 700px;
+  margin: auto;
+  background: #f4f0e7;
+  color: #222;
+  padding: 50px 30px;
+  border-radius: 8px;
+  font-family: Georgia, serif;
+  box-shadow: 0 20px 50px rgba(0,0,0,.4);
+}
+
+.letter h2 {
+  font-family: Georgia, serif;
+}
+
+.letter p {
+  font-size: 21px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 650px) {
+  .memory-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-area {
+    height: 430px;
+  }
+
+  .school-game {
+    height: 350px;
+  }
+
+  button {
+    padding: 14px 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     INICIO
+========================= -->
+
+<section id="inicio" class="screen active">
+  <div class="content">
+    <h1>MAMÁ</h1>
+
+    <p class="subtitle">
+      Una pequeña aventura hecha especialmente para vos.
+    </p>
+
+    <button class="primary" onclick="showScreen('historia')">
+      COMENZAR
+    </button>
+  </div>
+</section>
+
+
+<!-- =========================
+     HISTORIA
+========================= -->
+
+<section id="historia" class="screen">
+  <div class="content">
+
+    <h2>Antes de empezar...</h2>
+
+    <img
+      class="photo"
+      src="assets/foto1.jpg"
+      alt="Recuerdo de mamá y Fede"
+    >
+
+    <div class="history-card">
+      <p class="history-text">
+        Antes de llegar hasta acá hubo muchísimos momentos,
+        días, risas, aprendizajes y recuerdos.
+        <br><br>
+        Y en todos ellos hubo algo que siempre estuvo:
+        vos.
+      </p>
+    </div>
+
+    <img
+      class="photo"
+      src="assets/foto2.jpg"
+      alt="Recuerdo de mamá y Fede"
+    >
+
+    <button onclick="showScreen('recuerdos')">
+      SEGUIR
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     RECUERDOS
+========================= -->
+
+<section id="recuerdos" class="screen">
+  <div class="content">
+
+    <h2>Recuerdos</h2>
+
+    <p>
+      Hay algunos recuerdos escondidos.
+      Tocá los tres para descubrir qué tenés que hacer.
+    </p>
+
+    <div class="memory-grid">
+
+      <div class="memory" id="memory1" onclick="openMemory(1)">
+        <div class="icon">📖</div>
+        <strong>ÁLBUM</strong>
+        <p>Un recuerdo de hace muchos años.</p>
+      </div>
+
+      <div class="memory" id="memory2" onclick="openMemory(2)">
+        <div class="icon">💌</div>
+        <strong>CARTA</strong>
+        <p>Algo que quiero decirte.</p>
+      </div>
+
+      <div class="memory" id="memory3" onclick="openMemory(3)">
+        <div class="icon">🧸</div>
+        <strong>INFANCIA</strong>
+        <p>Una pista sobre todo lo que hacés por mí.</p>
+      </div>
+
+    </div>
+
+    <p id="memoryMessage"></p>
+
+    <button
+      id="memoryContinue"
+      class="locked"
+      disabled
+      onclick="showScreen('misiones')"
+    >
+      CONTINUAR
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     MISIONES
+========================= -->
+
+<section id="misiones" class="screen">
+  <div class="content">
+
+    <h2>Las misiones de mamá</h2>
+
+    <p>
+      Hay cosas que hacés todos los días por mí.
+      Ahora me toca intentar hacerlas a mí.
+    </p>
+
+    <div class="mission-list">
+
+      <div class="mission" id="mission-breakfast">
+        <span>🥣 Prepararme el desayuno</span>
+        <span class="check">🔒</span>
+      </div>
+
+      <div class="mission" id="mission-school">
+        <span>🎒 Llevarme al colegio</span>
+        <span class="check">🔒</span>
+      </div>
+
+      <div class="mission" id="mission-room">
+        <span>🧹 Ordenar mi habitación</span>
+        <span class="check">🔒</span>
+      </div>
+
+      <div class="mission" id="mission-wakeup">
+        <span>⏰ Despertarme para ir al cole</span>
+        <span class="check">🔒</span>
+      </div>
+
+      <div class="mission" id="mission-laundry">
+        <span>👕 Lavar mi ropa del cole</span>
+        <span class="check">🔒</span>
+      </div>
+
+    </div>
+
+    <button onclick="startNextMission()">
+      EMPEZAR MISIONES
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     MINIJUEGO 1
+     DESAYUNO
+========================= -->
+
+<section id="desayuno" class="screen">
+  <div class="content">
+
+    <h2>🥣 Preparar el desayuno</h2>
+
+    <p>
+      Mamá tiene que preparar el desayuno.
+      ¡Agarrá la comida antes de que caiga!
+    </p>
+
+    <div class="score">
+      Comida: <span id="foodScore">0</span> / 10
+    </div>
+
+    <div id="foodGame" class="game-area"></div>
+
+    <button onclick="startBreakfast()">
+      REINICIAR
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     MINIJUEGO 2
+     COLEGIO
+========================= -->
+
+<section id="colegio" class="screen">
+  <div class="content">
+
+    <h2>🎒 Ir al colegio</h2>
+
+    <p>
+      Llevá a Fede hasta el colegio evitando los obstáculos.
+    </p>
+
+    <div class="school-game" id="schoolGame">
+
+      <div id="player" class="player">🧒</div>
+
+      <div class="school">🏫</div>
+
+      <div class="obstacle" style="left:30%; bottom:65px;">
+        🪨
+      </div>
+
+      <div class="obstacle" style="left:55%; bottom:65px;">
+        🌳
+      </div>
+
+      <div class="obstacle" style="left:75%; bottom:65px;">
+        🚧
+      </div>
+
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" onclick="movePlayer(-1)">◀</button>
+      <button class="control-btn" onclick="movePlayer(1)">▶</button>
+    </div>
+
+    <p>
+      También podés usar las flechas del teclado.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     MINIJUEGO 3
+     DESPERTAR
+========================= -->
+
+<section id="despertar" class="screen">
+  <div class="content">
+
+    <h2>⏰ Despertarme para ir al cole</h2>
+
+    <p>
+      Fede no quiere despertarse...
+      ¡Tocá varias veces para despertarlo!
+    </p>
+
+    <div id="wakeupCharacter" class="wakeup-character">
+      😴
+    </div>
+
+    <div class="wakeup-progress">
+      <div id="wakeupBar" class="wakeup-bar"></div>
+    </div>
+
+    <p>
+      Despertado: <span id="wakeScore">0</span> / 8
+    </p>
+
+    <button onclick="wakeUp()">
+      ¡DESPERTAR!
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     MINIJUEGO 4
+     ROPA
+========================= -->
+
+<section id="ropa" class="screen">
+  <div class="content">
+
+    <h2>👕 Lavar la ropa del cole</h2>
+
+    <p>
+      Meté la ropa en el lavarropas.
+    </p>
+
+    <div class="washer">
+
+      <div id="washerDoor" class="washer-door">
+        🫧
+      </div>
+
+      <div class="clothes">
+
+        <button id="shirt" onclick="putClothes('shirt')">
+          👕 Remera
+        </button>
+
+        <button id="pants" onclick="putClothes('pants')">
+          👖 Pantalón
+        </button>
+
+        <button id="sock" onclick="putClothes('sock')">
+          🧦 Media
+        </button>
+
+        <button id="shoe" onclick="putClothes('shoe')">
+          👟 Zapatilla
+        </button>
+
+      </div>
+
+      <p>
+        Prendas: <span id="clothesScore">0</span> / 3
+      </p>
+
+      <button id="washButton" class="locked" disabled onclick="startWash()">
+        🌀 EMPEZAR LAVADO
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     MINIJUEGO 5
+     HABITACIÓN
+========================= -->
+
+<section id="cuarto" class="screen">
+  <div class="content">
+
+    <h2>🧹 Ordenar mi habitación</h2>
+
+    <p>
+      Tocá todas las cosas que están tiradas.
+    </p>
+
+    <div id="roomGame" class="room">
+
+      <div class="room-item" style="left:10%;top:20%;" onclick="sortItem(this)">
+        👕
+      </div>
+
+      <div class="room-item" style="left:45%;top:15%;" onclick="sortItem(this)">
+        📚
+      </div>
+
+      <div class="room-item" style="left:75%;top:30%;" onclick="sortItem(this)">
+        🧸
+      </div>
+
+      <div class="room-item" style="left:25%;top:65%;" onclick="sortItem(this)">
+        🎮
+      </div>
+
+      <div class="room-item" style="left:70%;top:70%;" onclick="sortItem(this)">
+        👟
+      </div>
+
+    </div>
+
+    <p>
+      Ordenado: <span id="roomScore">0</span> / 5
+    </p>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     NIVEL SECRETO
+========================= -->
+
+<section id="secreto" class="screen">
+  <div class="content">
+
+    <div class="secret-box">
+
+      <h2>🔐 NIVEL SECRETO</h2>
+
+      <div class="gift">🎁</div>
+
+      <p>
+        Completaste todas las misiones.
+      </p>
+
+      <p>
+        Pero todavía falta una última misión...
+      </p>
+
+      <h3>Encontrar el regalo.</h3>
+
+      <p>
+        Para conseguirlo vas a tener que seguir
+        una serie de pistas por la casa.
+      </p>
+
+      <button onclick="showScreen('pista1')">
+        COMENZAR BÚSQUEDA
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     PISTA 1
+========================= -->
+
+<section id="pista1" class="screen">
+  <div class="content">
+
+    <h2>🔎 Pista 1</h2>
+
+    <div class="clue">
+
+      <p>
+        Acá podés mirarte y ver a la persona que me cuida
+        todos los días.
+      </p>
+
+      <p>
+        Pero para seguir jugando, tenés que mirar más abajo,
+        donde los libros y fotos guardan recuerdos.
+      </p>
+
+    </div>
+
+    <button onclick="showScreen('pista2')">
+      ENCONTRÉ LA PISTA 1
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     PISTA 2
+========================= -->
+
+<section id="pista2" class="screen">
+  <div class="content">
+
+    <h2>🔎 Pista 2</h2>
+
+    <div class="clue">
+
+      <p>
+        Nos sentamos a compartir charlas, risas y momentos ricos.
+      </p>
+
+      <p>
+        Buscá la próxima pista cerca de las flores
+        que siempre llenan de vida este lugar.
+      </p>
+
+    </div>
+
+    <button onclick="showScreen('pista3')">
+      ENCONTRÉ LA PISTA 2
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     PISTA 3
+========================= -->
+
+<section id="pista3" class="screen">
+  <div class="content">
+
+    <h2>🔎 Última pista</h2>
+
+    <div class="clue">
+
+      <p>
+        Acá solemos ver series, partidos o películas en familia,
+        pero hoy el verdadero premio no está en la pantalla...
+      </p>
+
+      <p>
+        ¡Fijate bien cerquita de la tele para descubrir
+        dónde está el regalo de mamá!
+      </p>
+
+    </div>
+
+    <button onclick="showScreen('carta')">
+      ENCONTRÉ EL REGALO 🎁
+    </button>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     CARTA FINAL
+========================= -->
+
+<section id="carta" class="screen">
+  <div class="content">
+
+    <div class="letter">
+
+      <h2>❤️ Para mamá</h2>
+
+      <p>
+        ¡Feliz día de la madre!
+      </p>
+
+      <p>
+        Gracias por dedicar tu vida a cuidarme,
+        a entenderme, a enseñarme y a protegerme.
+      </p>
+
+      <p>
+        Te quiero muchísimo.
+      </p>
+
+      <p>
+        ❤️
+      </p>
+
+      <button onclick="showScreen('mensaje')">
+        FINALIZAR
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     FINAL
+========================= -->
+
+<section id="mensaje" class="screen">
+  <div class="content">
+
+    <h1>❤️</h1>
+
+    <h2>¡Feliz día, mamá!</h2>
+
+    <p>
+      Gracias por todo.
+    </p>
+
+    <p>
+      Esta aventura fue solamente una pequeña forma
+      de decirte cuánto te quiero.
+    </p>
+
+  </div>
+</section>
+
+
+<script>
+
+/* =====================================================
+   SISTEMA DE PANTALLAS
+===================================================== */
+
+function showScreen(id) {
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  const screen = document.getElementById(id);
+
+  if (screen) {
+    screen.classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  if (id === "desayuno") {
+    startBreakfast();
+  }
+
+  if (id === "colegio") {
+    resetSchool();
+  }
+
+  if (id === "despertar") {
+    resetWakeUp();
+  }
+
+  if (id === "ropa") {
+    resetLaundry();
+  }
+
+  if (id === "cuarto") {
+    resetRoom();
+  }
+}
+
+
+/* =====================================================
+   RECUERDOS
+===================================================== */
+
+let memoriesOpened = 0;
+
+function openMemory(number) {
+
+  const memory = document.getElementById("memory" + number);
+
+  if (!memory.classList.contains("opened")) {
+
+    memory.classList.add("opened");
+    memoriesOpened++;
+
+    const messages = {
+      1: "Hay muchísimos recuerdos que guardo con vos.",
+      2: "Siempre estuviste para escucharme y ayudarme.",
+      3: "Desde chico hiciste un montón de cosas por mí."
+    };
+
+    document.getElementById("memoryMessage").textContent =
+      messages[number];
+
+  }
+
+  if (memoriesOpened >= 3) {
+
+    const button = document.getElementById("memoryContinue");
+
+    button.disabled = false;
+    button.classList.remove("locked");
+  }
+}
+
+
+/* =====================================================
+   MISIONES
+===================================================== */
+
+const missions = {
+  breakfast: false,
+  school: false,
+  room: false,
+  wakeup: false,
+  laundry: false
+};
+
+const missionOrder = [
+  "breakfast",
+  "school",
+  "wakeup",
+  "laundry",
+  "room"
+];
+
+let currentMissionIndex = 0;
+
+function startNextMission() {
+
+  while (
+    currentMissionIndex < missionOrder.length &&
+    missions[missionOrder[currentMissionIndex]]
+  ) {
+    currentMissionIndex++;
+  }
+
+  if (currentMissionIndex >= missionOrder.length) {
+    showScreen("secreto");
+    return;
+  }
+
+  const next = missionOrder[currentMissionIndex];
+
+  const screens = {
+    breakfast: "desayuno",
+    school: "colegio",
+    wakeup: "despertar",
+    laundry: "ropa",
+    room: "cuarto"
+  };
+
+  showScreen(screens[next]);
+}
+
+
+function completeMission(name) {
+
+  if (missions[name]) return;
+
+  missions[name] = true;
+
+  const missionElement =
+    document.getElementById("mission-" + name);
+
+  if (missionElement) {
+
+    missionElement.classList.add("done");
+
+    const check =
+      missionElement.querySelector(".check");
+
+    if (check) {
+      check.textContent = "✓";
+    }
+  }
+
+  currentMissionIndex++;
+
+  setTimeout(() => {
+
+    const allDone =
+      Object.values(missions).every(value => value === true);
+
+    if (allDone) {
+      showScreen("secreto");
+    } else {
+      showScreen("misiones");
+    }
+
+  }, 700);
+}
+
+
+/* =====================================================
+   MINIJUEGO 1 — DESAYUNO
+===================================================== */
+
+let foodScore = 0;
+let foodInterval = null;
+
+const goodFoods = [
+  "🥣",
+  "🥛",
+  "🍞",
+  "🍎",
+  "🍌",
+  "🥐",
+  "🍪"
+];
+
+const badFoods = [
+  "🧦",
+  "📱",
+  "🧸"
+];
+
+function startBreakfast() {
+
+  clearInterval(foodInterval);
+
+  foodScore = 0;
+
+  document.getElementById("foodScore").textContent = "0";
+
+  const game =
+    document.getElementById("foodGame");
+
+  game.innerHTML = "";
+
+  foodInterval = setInterval(createFood, 650);
+}
+
+
+function createFood() {
+
+  const game =
+    document.getElementById("foodGame");
+
+  if (foodScore >= 10) {
+    clearInterval(foodInterval);
+    return;
+  }
+
+  const item = document.createElement("div");
+
+  item.className = "food";
+
+  const isGood =
+    Math.random() > .22;
+
+  item.textContent =
+    isGood
+      ? goodFoods[Math.floor(Math.random() * goodFoods.length)]
+      : badFoods[Math.floor(Math.random() * badFoods.length)];
+
+  item.dataset.good = isGood ? "true" : "false";
+
+  item.style.left =
+    Math.random() * 85 + "%";
+
+  item.style.animationDuration =
+    (2 + Math.random() * 2) + "s";
+
+  item.addEventListener("click", () => {
+
+    if (item.dataset.good === "true") {
+
+      foodScore++;
+
+      document.getElementById("foodScore").textContent =
+        foodScore;
+
+      item.remove();
+
+      if (foodScore >= 10) {
+
+        clearInterval(foodInterval);
+
+        setTimeout(() => {
+          completeMission("breakfast");
+        }, 500);
+      }
+
+    } else {
+
+      item.style.opacity = "0";
+      item.remove();
+
+    }
+
+  });
+
+  game.appendChild(item);
+
+  setTimeout(() => {
+    if (item.parentNode) {
+      item.remove();
+    }
+  }, 4500);
+}
+
+
+/* =====================================================
+   MINIJUEGO 2 — COLEGIO
+===================================================== */
+
+let playerPosition = 40;
+let schoolFinished = false;
+
+function resetSchool() {
+
+  playerPosition = 40;
+  schoolFinished = false;
+
+  const player =
+    document.getElementById("player");
+
+  player.style.left = playerPosition + "px";
+}
+
+
+function movePlayer(direction) {
+
+  if (schoolFinished) return;
+
+  playerPosition += direction * 18;
+
+  const game =
+    document.getElementById("schoolGame");
+
+  const max =
+    game.clientWidth - 85;
+
+  playerPosition =
+    Math.max(10, Math.min(max, playerPosition));
+
+  const player =
+    document.getElementById("player");
+
+  player.style.left =
+    playerPosition + "px";
+
+  if (playerPosition >= max - 10) {
+
+    schoolFinished = true;
+
+    setTimeout(() => {
+      completeMission("school");
+    }, 500);
+  }
+}
+
+
+document.addEventListener("keydown", function(event) {
+
+  const active =
+    document.getElementById("colegio").classList.contains("active");
+
+  if (!active) return;
+
+  if (event.key === "ArrowRight") {
+    movePlayer(1);
+  }
+
+  if (event.key === "ArrowLeft") {
+    movePlayer(-1);
+  }
+});
+
+
+/* =====================================================
+   MINIJUEGO 3 — DESPERTAR
+===================================================== */
+
+let wakeScore = 0;
+
+function resetWakeUp() {
+
+  wakeScore = 0;
+
+  document.getElementById("wakeScore").textContent = "0";
+  document.getElementById("wakeupBar").style.width = "0%";
+  document.getElementById("wakeupCharacter").textContent = "😴";
+}
+
+
+function wakeUp() {
+
+  if (wakeScore >= 8) return;
+
+  wakeScore++;
+
+  document.getElementById("wakeScore").textContent =
+    wakeScore;
+
+  document.getElementById("wakeupBar").style.width =
+    (wakeScore / 8 * 100) + "%";
+
+  const character =
+    document.getElementById("wakeupCharacter");
+
+  if (wakeScore < 3) {
+    character.textContent = "😴";
+  } else if (wakeScore < 6) {
+    character.textContent = "🥱";
+  } else if (wakeScore < 8) {
+    character.textContent = "😳";
+  } else {
+
+    character.textContent = "😄";
+
+    setTimeout(() => {
+      completeMission("wakeup");
+    }, 500);
+  }
+}
+
+
+/* =====================================================
+   MINIJUEGO 4 — ROPA
+===================================================== */
+
+let clothesPlaced = 0;
+
+const clothesUsed = {
+  shirt: false,
+  pants: false,
+  sock: false
+};
+
+
+function resetLaundry() {
+
+  clothesPlaced = 0;
+
+  clothesUsed.shirt = false;
+  clothesUsed.pants = false;
+  clothesUsed.sock = false;
+
+  document.getElementById("clothesScore").textContent = "0";
+
+  ["shirt", "pants", "sock"].forEach(id => {
+
+    const button =
+      document.getElementById(id);
+
+    button.classList.remove("used");
+    button.disabled = false;
+
+  });
+
+  const wash =
+    document.getElementById("washButton");
+
+  wash.disabled = true;
+  wash.classList.add("locked");
+
+  document.getElementById("washerDoor").textContent = "🫧";
+}
+
+
+function putClothes(type) {
+
+  if (type === "shoe") {
+    return;
+  }
+
+  if (clothesUsed[type]) {
+    return;
+  }
+
+  clothesUsed[type] = true;
+  clothesPlaced++;
+
+  const button =
+    document.getElementById(type);
+
+  button.classList.add("used");
+  button.disabled = true;
+
+  document.getElementById("clothesScore").textContent =
+    clothesPlaced;
+
+  if (clothesPlaced >= 3) {
+
+    const wash =
+      document.getElementById("washButton");
+
+    wash.disabled = false;
+    wash.classList.remove("locked");
+  }
+}
+
+
+function startWash() {
+
+  if (clothesPlaced < 3) return;
+
+  const door =
+    document.getElementById("washerDoor");
+
+  door.textContent = "🌀";
+
+  setTimeout(() => {
+    door.textContent = "✨";
+
+    setTimeout(() => {
+      completeMission("laundry");
+    }, 700);
+
+  }, 1600);
+}
+
+
+/* =====================================================
+   MINIJUEGO 5 — HABITACIÓN
+===================================================== */
+
+let roomScore = 0;
+
+function resetRoom() {
+
+  roomScore = 0;
+
+  document.getElementById("roomScore").textContent = "0";
+
+  document.querySelectorAll(".room-item").forEach(item => {
+    item.classList.remove("sorted");
+  });
+}
+
+
+function sortItem(item) {
+
+  if (item.classList.contains("sorted")) {
+    return;
+  }
+
+  item.classList.add("sorted");
+
+  roomScore++;
+
+  document.getElementById("roomScore").textContent =
+    roomScore;
+
+  if (roomScore >= 5) {
+
+    setTimeout(() => {
+      completeMission("room");
+    }, 600);
+  }
+}
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+updateMissionDisplay();
+
+
+function updateMissionDisplay() {
+
+  Object.keys(missions).forEach(name => {
+
+    const element =
+      document.getElementById("mission-" + name);
+
+    if (!element) return;
+
+    if (missions[name]) {
+
+      element.classList.add("done");
+
+      const check =
+        element.querySelector(".check");
+
+      if (check) {
+        check.textContent = "✓";
+      }
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>
