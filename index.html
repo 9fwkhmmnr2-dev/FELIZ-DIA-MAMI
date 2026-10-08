@@ -142,11 +142,13 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
 .gota{position:absolute;top:34%;font-size:36px;animation:gota 1.2s ease-in forwards}
 @keyframes gota{to{transform:translateY(170px) rotate(220deg);opacity:0}}
 .item.fijo{animation:none;border:2px solid var(--oro);border-radius:16px;background:rgba(201,164,92,.18)}
+#btnMute{position:fixed;top:max(10px,env(safe-area-inset-top));right:10px;z-index:20;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--oro);background:rgba(255,250,243,.9);font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.15);cursor:pointer}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
 </style>
 </head>
 <body>
 
+<button id="btnMute" aria-label="Sonido">🔊</button>
 <div class="toast" id="toast">¡Misión cumplida! ✨</div>
 
 <section class="screen active" id="inicio">
@@ -269,13 +271,52 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
   }
   function show(id){
     petalas(id);
+    if(id==='secreto'||id==='carta'||id==='final')sfx('magia');
     var a=document.querySelector('.screen.active'); if(a)a.classList.remove('active');
     $(id).classList.add('active'); $(id).scrollTop=0;
   }
   function rnd(a,b){return a+Math.random()*(b-a)}
 
+  /* AUDIO */
+  var AC=null, mute=false, mus=new Audio('assets/musica.mp3');
+  mus.loop=true; mus.volume=.35; mus.preload='none';
+  function ctx(){
+    if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+    if(AC&&AC.state==='suspended')AC.resume();
+    return AC;
+  }
+  function tono(f,d,t,v,delay){
+    var c=ctx(); if(!c||mute)return;
+    var o=c.createOscillator(), g=c.createGain(), t0=c.currentTime+(delay||0);
+    o.type=t||'sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,t0); g.gain.linearRampToValueAtTime(v||.15,t0+.01); g.gain.exponentialRampToValueAtTime(.001,t0+d);
+    o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0+d+.05);
+  }
+  function sfx(n){
+    if(n==='tap')tono(660,.12,'sine');
+    else if(n==='pop'){tono(880,.1,'triangle');tono(1320,.12,'triangle',.12,.06)}
+    else if(n==='ok'){[523,659,784,1047].forEach(function(f,i){tono(f,.28,'sine',.15,i*.11)})}
+    else if(n==='mal'){tono(220,.25,'sawtooth',.1);tono(165,.32,'sawtooth',.1,.13)}
+    else if(n==='salto'){tono(400,.14,'square',.06);tono(620,.12,'square',.06,.08)}
+    else if(n==='magia'){[784,988,1175,1568,1976].forEach(function(f,i){tono(f,.5,'sine',.1,i*.12)})}
+  }
+  function playMusic(){ if(!mute){var p=mus.play(); if(p&&p.catch)p.catch(function(){})} }
+  $('btnMute').onclick=function(){
+    mute=!mute; this.textContent=mute?'🔇':'🔊';
+    if(mute)mus.pause(); else{ctx();playMusic()}
+  };
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('button');
+    if(!b||b.id==='btnMute'||b.disabled)return;
+    sfx(b.classList.contains('item')?'pop':'tap');
+  });
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden)mus.pause(); else if(!mute&&started)playMusic();
+  });
+  var started=false;
+
   /* INICIO */
-  $('btnComenzar').onclick=function(){show('historia')};
+  $('btnComenzar').onclick=function(){started=true;ctx();playMusic();show('historia')};
 
   /* HISTORIA */
   var fotos=['assets/foto1.jpg','assets/foto2.jpg','assets/foto3.jpg'], fi=0;
@@ -326,7 +367,7 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
     $('hud').textContent=n+' / 5';
   }
   function completar(k){
-    hecho[k]=true;
+    hecho[k]=true; sfx('ok');
     var gracias=['Gracias por cada desayuno 🥣','Gracias por llevarme siempre 🎒','Gracias por tu paciencia con mi desorden 🧹','Gracias por despertarme con cariño ⏰','Gracias por cuidar hasta mi ropa 👕'];
     var t=$('toast'); t.textContent=gracias[k]; t.classList.add('on');
     setTimeout(function(){
@@ -354,7 +395,7 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
       b.onclick=function(){
         if(desLock)return;
         b.classList.add('hit');
-        if(o.b){desLock=true;aviso(s,'¡Eso no es desayuno! 📵 Empezá de nuevo');setTimeout(initDes,1400);return}
+        if(o.b){sfx('mal');desLock=true;aviso(s,'¡Eso no es desayuno! 📵 Empezá de nuevo');setTimeout(initDes,1400);return}
         n++; barra('bDes',n/total*100);
         if(n===total)completar(0);
       };
@@ -372,7 +413,7 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
     $('auto').style.bottom='56px'; barra('bCol',0);
     col.raf=requestAnimationFrame(loopCol);
   }
-  function saltar(){ if(col.on&&col.y===0)col.vy=640; }
+  function saltar(){ if(col.on&&col.y===0){col.vy=640;sfx('salto')} }
   function loopCol(t){
     if(!col.on||!$('g-colegio').classList.contains('active'))return;
     var st=$('stCol'), W=st.clientWidth, dt=Math.min(.04,(t-col.last)/1000); col.last=t;
@@ -390,6 +431,7 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
       if(o.x<-50){o.el.remove();col.obs.splice(i,1);col.n++;barra('bCol',col.n/META*100)}
     }
     if(hit){
+      sfx('mal');
       col.obs.forEach(function(o){o.el.remove()}); col.obs=[]; col.n=0; col.next=1200; barra('bCol',0);
       var a=$('aviso'); a.classList.add('on'); setTimeout(function(){a.classList.remove('on')},1100);
     }
@@ -415,7 +457,7 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
       b.onclick=function(){
         if(habLock||b.dataset.ok)return;
         if(o.f){
-          habW++; b.style.animation='shake .3s'; setTimeout(function(){b.style.animation=''},320);
+          habW++; sfx('mal'); b.style.animation='shake .3s'; setTimeout(function(){b.style.animation=''},320);
           if(habW>=3){
             habLock=true;
             var p=document.createElement('div'); p.id='perdio'; p.className='sacude';
@@ -468,7 +510,7 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
     }catch(x){}
   }
   function sacudida(){
-    if(!shk.on)return; shk.cnt++;
+    if(!shk.on)return; shk.cnt++; sfx('tap');
     var g=$('sacG'); g.classList.remove('wob'); void g.offsetWidth; g.classList.add('wob');
     if(shk.cnt<3){$('sacMsg').textContent='📳 ¡Seguí sacudiendo! ('+shk.cnt+'/3)';return}
     shk.on=false; var st=$('sacude');
