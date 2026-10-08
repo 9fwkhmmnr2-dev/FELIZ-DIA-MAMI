@@ -23,10 +23,11 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
 .btn.oro{background:linear-gradient(135deg,#d9b974,var(--oro));color:#2b2118;box-shadow:0 10px 24px rgba(201,164,92,.45)}
 .hidden{display:none!important}
 /* inicio */
-#inicio{color:#fff;background:#3a2a2a url('assets/foto-inicio.jpg') center/cover no-repeat}
-#inicio::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,18,18,.55),rgba(30,18,18,.7))}
-#inicio>*{position:relative}
-#inicio h1{font-size:clamp(64px,22vw,110px);letter-spacing:.12em;text-shadow:0 4px 24px rgba(0,0,0,.4)}
+#inicio{color:#fff;background:#2a1d1d;overflow:hidden;justify-content:flex-end;gap:10px;padding-bottom:max(34px,env(safe-area-inset-bottom))}
+#inicio::after{content:"";position:absolute;inset:-30px;z-index:-2;background:linear-gradient(rgba(30,18,18,.45),rgba(30,18,18,.65)),url('assets/foto-inicio.jpg') center/cover no-repeat;filter:blur(26px);transform:scale(1.1)}
+#inicio::before{content:"";position:absolute;left:0;right:0;top:0;bottom:270px;z-index:-1;background:url('assets/foto-inicio.jpg') center/contain no-repeat}
+#inicio>*{position:relative;z-index:1}
+#inicio h1{font-size:clamp(56px,18vw,96px);letter-spacing:.12em;text-shadow:0 4px 24px rgba(0,0,0,.4)}
 #inicio p{color:#f6e6e2;font-family:var(--serif);font-style:italic;font-size:24px}
 #inicio .btn{margin-top:14px;animation:pulso 2.4s ease-in-out infinite}
 @keyframes pulso{50%{transform:scale(1.05)}}
@@ -143,6 +144,17 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
 @keyframes gota{to{transform:translateY(170px) rotate(220deg);opacity:0}}
 .item.fijo{animation:none;border:2px solid var(--oro);border-radius:16px;background:rgba(201,164,92,.18)}
 #btnMute{position:fixed;top:max(10px,env(safe-area-inset-top));right:10px;z-index:20;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--oro);background:rgba(255,250,243,.9);font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,.15);cursor:pointer}
+#misiones{justify-content:flex-start;gap:10px}
+#misiones>h2{margin-top:auto}#misiones>.lista{margin-bottom:auto;gap:9px}
+#misiones .mis{min-height:60px;padding:10px 16px}
+.olla{position:absolute;top:34px;left:0;right:0;font-size:120px;line-height:1.1;text-align:center}
+.medidor{position:absolute;left:22px;right:22px;bottom:50px;height:26px;border-radius:99px;background:var(--beige);box-shadow:inset 0 2px 5px rgba(0,0,0,.2)}
+.zona-v{position:absolute;left:39%;width:22%;top:0;bottom:0;border-radius:99px;background:#a9c9a0}
+.marca{position:absolute;top:-8px;height:42px;width:8px;border-radius:6px;background:var(--rosa);box-shadow:0 2px 6px rgba(0,0,0,.3);left:0}
+.pers{position:absolute;bottom:60px;font-size:70px;line-height:1}
+.latido{position:absolute;top:40px;left:0;right:0;text-align:center;font-size:80px;line-height:1;transition:transform .1s}
+#btnAbrazo{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#razon .papel{transform:none}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
 </style>
 </head>
@@ -169,7 +181,7 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
   <div style="font-size:64px">🎒☀️🧺</div>
   <h2>Antes de empezar</h2>
   <p>Hay cosas que hacés todos los días, sin que nadie te lo pida y casi sin que nadie lo note.</p>
-  <p>Este juego las convierte en misiones. Completá las cinco para llegar al nivel secreto.</p>
+  <p>Este juego las convierte en misiones. Completá las siete para llegar al nivel secreto. Al terminar cada una, te cuento por qué te la pedí.</p>
   <button class="btn" id="btnContinuar">EMPEZAR LAS MISIONES</button>
 </section>
 
@@ -211,6 +223,27 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
     <div class="sacude hidden" id="sacude"><p id="sacMsg">📳 ¡Sacudí el celu! Hay cosas en los bolsillos.</p><span class="sacG" id="sacG"></span><button class="btn" id="btnSacudir">SACUDIR 📳</button></div>
   </div>
   <div class="bar"><i id="bRopa"></i></div>
+</section>
+
+<section class="screen" id="g-comida">
+  <h2>🍝 La comida</h2><p>Tocá ¡AHORA! cuando la marca esté en la zona verde. Tres veces y está lista.</p>
+  <div class="stage" id="stCom"><div class="olla" id="olla">🥔</div><div class="medidor"><div class="zona-v"></div><div class="marca" id="marca"></div></div></div>
+  <div class="bar"><i id="bCom"></i></div>
+  <button class="btn" id="btnAhora">¡AHORA!</button>
+</section>
+
+<section class="screen" id="g-abrazo">
+  <h2>🫂 Un abrazo</h2><p>Mantené apretado el botón hasta llenar el abrazo.</p>
+  <div class="stage"><div class="latido" id="latido">❤️</div><span class="pers" id="abL" style="left:8%">🧒</span><span class="pers" id="abR" style="right:8%">👩</span></div>
+  <div class="bar"><i id="bAbr"></i></div>
+  <button class="btn" id="btnAbrazo">MANTENÉ APRETADO 🤗</button>
+</section>
+
+<section class="screen" id="razon">
+  <div id="razIc" style="font-size:70px"></div>
+  <h2>Por qué te lo pedí</h2>
+  <div class="papel"><p id="razTx"></p></div>
+  <button class="btn" id="btnRazon">SEGUIR</button>
 </section>
 
 <section class="screen" id="secreto">
@@ -351,8 +384,19 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
     {t:'🎒 Llevarme al colegio',g:'g-colegio',i:initCol},
     {t:'🧹 Ordenar mi habitación',g:'g-habitacion',i:initHab},
     {t:'⏰ Despertarme para ir al cole',g:'g-despertar',i:initDesp},
-    {t:'👕 Lavar mi ropa del cole',g:'g-ropa',i:initRopa}
-  ], hecho=[false,false,false,false,false];
+    {t:'👕 Lavar mi ropa del cole',g:'g-ropa',i:initRopa},
+    {t:'🍝 Cocinarme mi comida favorita',g:'g-comida',i:initCom},
+    {t:'🫂 Darme un abrazo cuando lo necesito',g:'g-abrazo',i:initAbr}
+  ], hecho=[false,false,false,false,false,false,false];
+  var RZ=[
+    {i:'🥣',t:'Te hice preparar el desayuno porque todas las mañanas vos me lo preparabas a mí, sin falta, aunque estuvieras cansada. Cada taza caliente era tu forma de decirme «te quiero».'},
+    {i:'🎒',t:'Te hice llevarme al colegio porque cada día hacías ese camino por mí, sin quejarte, para que yo llegara a tiempo y tranquilo. Gracias por acompañarme siempre.'},
+    {i:'🧹',t:'Te hice ordenar mi habitación porque, aunque yo la dejaba hecha un desastre, vos la ordenabas con paciencia y sin reproches. Gracias por cuidar hasta los rincones de mi mundo.'},
+    {i:'⏰',t:'Te hice despertarme porque cada mañana lo hacías con cariño, aunque yo pusiera mala cara. Siempre fuiste mi primer buen día.'},
+    {i:'👕',t:'Te hice lavar mi ropa porque siempre me la dejaste limpia y lista, hasta revisando los bolsillos. Los detalles que nadie ve también son amor.'},
+    {i:'🍝',t:'Te hice cocinar porque tu comida es la que más sabe a casa. Cada plato tuyo tenía un ingrediente que no se compra: dedicación.'},
+    {i:'🫂',t:'Y te pedí un abrazo porque es lo que siempre necesité de vos, y lo que siempre me diste. Gracias por cada uno.'}
+  ];
   function renderMisiones(){
     var l=$('lista'); l.innerHTML=''; var n=0;
     M.forEach(function(m,k){
@@ -364,17 +408,21 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
       b.onclick=function(){m.i();show(m.g)};
       l.appendChild(b);
     });
-    $('hud').textContent=n+' / 5';
+    $('hud').textContent=n+' / '+M.length;
   }
   function completar(k){
     hecho[k]=true; sfx('ok');
-    var gracias=['Gracias por cada desayuno 🥣','Gracias por llevarme siempre 🎒','Gracias por tu paciencia con mi desorden 🧹','Gracias por despertarme con cariño ⏰','Gracias por cuidar hasta mi ropa 👕'];
-    var t=$('toast'); t.textContent=gracias[k]; t.classList.add('on');
+    var t=$('toast'); t.textContent='¡Misión cumplida! ✨'; t.classList.add('on');
     setTimeout(function(){
       t.classList.remove('on');
-      if(hecho.every(Boolean))show('secreto'); else{renderMisiones();show('misiones')}
-    },2300);
+      $('razIc').textContent=RZ[k].i; $('razTx').textContent=RZ[k].t;
+      $('btnRazon').textContent=hecho.every(Boolean)?'CONTINUAR':'SEGUIR';
+      show('razon');
+    },1000);
   }
+  $('btnRazon').onclick=function(){
+    if(hecho.every(Boolean))show('secreto'); else{renderMisiones();show('misiones')}
+  };
   function barra(id,p){$(id).style.width=Math.min(100,p)+'%'}
 
   /* 1. DESAYUNO */
@@ -543,6 +591,48 @@ p{font-size:18px;line-height:1.55;max-width:34ch}
       r.appendChild(b);
     });
   }
+
+  /* 6. COMIDA */
+  var com={on:false,h:0,raf:0,last:0,ph:0,pos:50};
+  function initCom(){
+    cancelAnimationFrame(com.raf); com.on=true; com.h=0; com.ph=0; com.last=performance.now();
+    barra('bCom',0); $('olla').textContent='🥔'; com.raf=requestAnimationFrame(loopCom);
+  }
+  function loopCom(t){
+    if(!com.on||!$('g-comida').classList.contains('active'))return;
+    var dt=Math.min(.05,(t-com.last)/1000); com.last=t;
+    com.ph+=dt*(2.3+com.h*.8); com.pos=50+46*Math.sin(com.ph);
+    $('marca').style.left='calc('+com.pos+'% - 4px)';
+    com.raf=requestAnimationFrame(loopCom);
+  }
+  $('btnAhora').onclick=function(){
+    if(!com.on)return;
+    if(Math.abs(com.pos-50)<=11){
+      com.h++; barra('bCom',com.h/3*100); $('olla').textContent=['🥔','🥘','🍲','🍝'][com.h];
+      if(com.h>=3){com.on=false;completar(5)}
+    } else { sfx('mal'); aviso($('stCom'),'¡Casi! Probá de nuevo'); }
+  };
+
+  /* 7. ABRAZO */
+  var abr={p:0,hold:false,on:false,raf:0,last:0};
+  function initAbr(){
+    cancelAnimationFrame(abr.raf); abr.p=0; abr.hold=false; abr.on=true; abr.last=performance.now();
+    abr.raf=requestAnimationFrame(loopAbr);
+  }
+  function loopAbr(t){
+    if(!abr.on||!$('g-abrazo').classList.contains('active'))return;
+    var dt=Math.min(.05,(t-abr.last)/1000); abr.last=t;
+    abr.p+=abr.hold?dt*100/3:-dt*35; abr.p=Math.max(0,abr.p);
+    barra('bAbr',abr.p);
+    $('abL').style.left=(8+abr.p*.3)+'%'; $('abR').style.right=(8+abr.p*.3)+'%';
+    $('latido').style.transform='scale('+(1+abr.p/100*.9)+')';
+    if(abr.p>=100){abr.on=false;completar(6);return}
+    abr.raf=requestAnimationFrame(loopAbr);
+  }
+  var bA=$('btnAbrazo');
+  bA.addEventListener('pointerdown',function(e){e.preventDefault();abr.hold=true});
+  ['pointerup','pointerleave','pointercancel'].forEach(function(n){bA.addEventListener(n,function(){abr.hold=false})});
+  bA.addEventListener('contextmenu',function(e){e.preventDefault()});
 
   /* SECRETO, PISTAS, CARTA, FINAL */
   $('btnSecreto').onclick=function(){show('pista1')};
